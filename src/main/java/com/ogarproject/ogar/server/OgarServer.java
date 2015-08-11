@@ -86,6 +86,7 @@ public class OgarServer implements Server {
         return playerList;
     }
 
+    @Override
     public WorldImpl getWorld() {
         return world;
     }
