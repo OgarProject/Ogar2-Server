@@ -17,7 +17,6 @@
 package com.ogarproject.ogar.server.net.packet.inbound;
 
 import com.ogarproject.ogar.server.net.packet.Packet;
-import com.ogarproject.ogar.server.net.throwable.MalformedPacketException;
 import com.ogarproject.ogar.server.net.throwable.WrongDirectionException;
 import io.netty.buffer.ByteBuf;
 
@@ -34,16 +33,8 @@ public class PacketInMouseMove extends Packet {
 
     @Override
     public void readData(ByteBuf buf) {
-        if (buf.readableBytes() == 8) {
-            x = buf.readShort();
-            y = buf.readShort();
-        } else if (buf.readableBytes() == 20) {
-            x = buf.readDouble();
-            y = buf.readDouble();
-        } else {
-            throw new MalformedPacketException("Invalid " + getClass().getName() + ": buf.readableBytes() == " + buf.readableBytes());
-        }
-
+        x = buf.readInt();
+        y = buf.readInt();
         nodeId = buf.readInt();
     }
 
