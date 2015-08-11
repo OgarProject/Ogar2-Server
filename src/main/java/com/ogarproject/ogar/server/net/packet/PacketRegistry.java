@@ -48,6 +48,7 @@ public class PacketRegistry {
         SERVERBOUND.registerPacket(19, PacketInReleaseQ.class);
         SERVERBOUND.registerPacket(21, PacketInEjectMass.class);
         SERVERBOUND.registerPacket(80, PacketInToken.class);
+        SERVERBOUND.registerPacket(81, PacketInFacebookLogin.class);
         SERVERBOUND.registerPacket(240, PacketOMPMessage.class);
         SERVERBOUND.registerPacket(254, PacketInAuthenticate.class);
         SERVERBOUND.registerPacket(255, PacketInResetConnection.class);

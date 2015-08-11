@@ -34,6 +34,7 @@ import com.ogarproject.ogar.server.net.packet.inbound.PacketInSetNick;
 import com.ogarproject.ogar.server.net.packet.inbound.PacketInResetConnection;
 import com.ogarproject.ogar.server.net.packet.inbound.PacketInSpectate;
 import com.ogarproject.ogar.server.net.packet.Packet;
+import com.ogarproject.ogar.server.net.packet.inbound.PacketInFacebookLogin;
 import com.ogarproject.ogar.server.net.packet.outbound.PacketOutWorldBorder;
 import com.ogarproject.ogar.server.net.packet.universal.PacketOMPMessage;
 import com.ogarproject.ogar.server.net.throwable.UnhandledPacketException;
@@ -85,6 +86,8 @@ public class PlayerConnection {
             handle((PacketInEjectMass) packet);
         } else if (packet instanceof PacketInToken) {
             handle((PacketInToken) packet);
+        } else if (packet instanceof PacketInFacebookLogin) {
+            handle((PacketInFacebookLogin) packet);
         } else if (packet instanceof PacketInAuthenticate) {
             handle((PacketInAuthenticate) packet);
         } else if (packet instanceof PacketInResetConnection) {
@@ -160,6 +163,10 @@ public class PlayerConnection {
         // Player connected, notify plugins
         PlayerConnectedEvent connectedEvent = new PlayerConnectedEvent(player);
         Ogar.getServer().getPluginManager().callEvent(connectedEvent);
+    }
+
+    public void handle(PacketInFacebookLogin packet) {
+
     }
 
     public void handle(PacketInAuthenticate packet) {
