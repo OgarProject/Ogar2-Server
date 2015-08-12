@@ -147,6 +147,8 @@ public abstract class EntityImpl implements Entity, Tickable {
      */
     public abstract void tick();
 
+    public void onRemove() {}
+
     @Override
     public int hashCode() {
         int hash = 5;

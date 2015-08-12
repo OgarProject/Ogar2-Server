@@ -106,7 +106,7 @@ public class WorldImpl implements World {
             throw new IllegalArgumentException("Entity with the specified ID does not exist in the world!");
         }
 
-        entities.remove(id);
+        entities.remove(id).onRemove();
     }
 
     @Override

@@ -212,6 +212,11 @@ public class CellEntityImpl extends EntityImpl implements CellEntity {
         }
     }
 
+    @Override
+    public void onRemove() {
+        getOwner().removeCell(this);
+    }
+
     private boolean simpleCollide(CellEntityImpl other, double collisionDist) {
         return MathHelper.fastAbs(getX() - other.getX()) < (2 * collisionDist) && MathHelper.fastAbs(getY() - other.getY()) < (2 * collisionDist);
     }
