@@ -104,7 +104,7 @@ public class PlayerTracker {
                 .getEntities()
                 .stream()
                 .filter((e) -> e.getPosition().getY() <= viewBottom && e.getPosition().getY() >= viewTop && e.getPosition().getX() <= viewRight
-                        && e.getPosition().getY() >= viewLeft).mapToInt((e) -> e.getID()).boxed().collect(Collectors.toList());
+                        && e.getPosition().getX() >= viewLeft).mapToInt((e) -> e.getID()).boxed().collect(Collectors.toList());
     }
 
     public List<Integer> getVisibleEntities() {
