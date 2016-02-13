@@ -1,4 +1,5 @@
 target/
+test/
 *.DS_Store
 server.log
 dependency-reduced-pom.xml
