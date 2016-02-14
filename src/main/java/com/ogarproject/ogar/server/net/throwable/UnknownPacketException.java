@@ -18,7 +18,8 @@ package com.ogarproject.ogar.server.net.throwable;
 
 public class UnknownPacketException extends RuntimeException {
 
-    public UnknownPacketException() {}
+    public UnknownPacketException() {
+    }
 
     public UnknownPacketException(String message) {
         super(message);

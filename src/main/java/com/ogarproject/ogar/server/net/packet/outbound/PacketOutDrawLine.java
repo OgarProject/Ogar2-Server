@@ -25,7 +25,8 @@ public class PacketOutDrawLine extends Packet {
     public int x;
     public int y;
 
-    public PacketOutDrawLine() {}
+    public PacketOutDrawLine() {
+    }
 
     public PacketOutDrawLine(int x, int y) {
         this.x = x;

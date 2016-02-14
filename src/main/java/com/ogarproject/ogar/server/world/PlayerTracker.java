@@ -19,7 +19,6 @@ package com.ogarproject.ogar.server.world;
 import com.google.common.collect.ImmutableList;
 import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.entity.EntityImpl;
-import com.ogarproject.ogar.server.entity.impl.CellEntityImpl;
 import com.ogarproject.ogar.server.net.PlayerConnection;
 import com.ogarproject.ogar.server.net.packet.outbound.PacketOutUpdateNodes;
 import java.util.ArrayDeque;
@@ -28,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import com.ogarproject.ogar.api.entity.Cell;
 
 public class PlayerTracker {
 
@@ -60,7 +60,7 @@ public class PlayerTracker {
 
     private void updateRange() {
         double totalSize = 1.0D;
-        for (CellEntityImpl cell : player.getCells()) {
+        for (Cell cell : player.getCells()) {
             totalSize += cell.getPhysicalSize();
         }
 
@@ -78,7 +78,7 @@ public class PlayerTracker {
         double x = 0;
         double y = 0;
 
-        for (CellEntityImpl cell : player.getCells()) {
+        for (Cell cell : player.getCells()) {
             x += cell.getPosition().getX();
             y += cell.getPosition().getY();
         }

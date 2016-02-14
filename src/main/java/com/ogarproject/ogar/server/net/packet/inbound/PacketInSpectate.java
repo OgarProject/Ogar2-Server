@@ -28,6 +28,7 @@ public class PacketInSpectate extends Packet {
     }
 
     @Override
-    public void readData(ByteBuf buf) {}
+    public void readData(ByteBuf buf) {
+    }
 
 }

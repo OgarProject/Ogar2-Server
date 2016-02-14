@@ -19,10 +19,10 @@ package com.ogarproject.ogar.server;
 import com.ogarproject.ogar.server.world.PlayerImpl;
 import com.ogarproject.ogar.server.net.packet.Packet;
 import com.google.common.collect.ImmutableSet;
-import com.ogarproject.ogar.server.entity.impl.CellEntityImpl;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import com.ogarproject.ogar.api.entity.Cell;
 
 public class PlayerList {
 
@@ -44,7 +44,7 @@ public class PlayerList {
     public void removePlayer(PlayerImpl player) {
         players.remove(player);
         if (player != null) {
-            for (CellEntityImpl cell : player.getCells()) {
+            for (Cell cell : player.getCells()) {
                 server.getWorld().removeEntity(cell);
             }
         }

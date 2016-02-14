@@ -21,7 +21,8 @@ package com.ogarproject.ogar.server.net.throwable;
  */
 public class MalformedPacketException extends RuntimeException {
 
-    public MalformedPacketException() {}
+    public MalformedPacketException() {
+    }
 
     public MalformedPacketException(String message) {
         super(message);

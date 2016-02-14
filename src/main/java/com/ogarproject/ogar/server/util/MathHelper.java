@@ -21,7 +21,7 @@ public class MathHelper {
     /**
      * A fast absolute value function.
      * <p>
-     * 
+     *
      * @param input
      * @return
      */

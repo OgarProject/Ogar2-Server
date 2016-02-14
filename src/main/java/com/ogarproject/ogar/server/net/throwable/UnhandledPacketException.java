@@ -18,7 +18,8 @@ package com.ogarproject.ogar.server.net.throwable;
 
 public class UnhandledPacketException extends RuntimeException {
 
-    public UnhandledPacketException() {}
+    public UnhandledPacketException() {
+    }
 
     public UnhandledPacketException(String message) {
         super(message);

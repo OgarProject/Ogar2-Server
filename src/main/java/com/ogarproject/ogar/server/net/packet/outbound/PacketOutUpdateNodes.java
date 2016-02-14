@@ -17,7 +17,7 @@
 package com.ogarproject.ogar.server.net.packet.outbound;
 
 import com.ogarproject.ogar.server.entity.EntityImpl;
-import com.ogarproject.ogar.server.entity.impl.CellEntityImpl;
+import com.ogarproject.ogar.server.entity.impl.CellImpl;
 import com.ogarproject.ogar.server.net.packet.Packet;
 import com.ogarproject.ogar.server.net.throwable.MalformedPacketException;
 import com.ogarproject.ogar.server.net.throwable.WrongDirectionException;
@@ -66,8 +66,8 @@ public class PacketOutUpdateNodes extends Packet {
             buf.writeByte(entity.getColor().getBlue());
             buf.writeBoolean(entity.isSpiked());
             // buf.skipBytes(18);
-            if (entity instanceof CellEntityImpl) {
-                CellEntityImpl cell = (CellEntityImpl) entity;
+            if (entity instanceof CellImpl) {
+                CellImpl cell = (CellImpl) entity;
                 if (cell.getName() == null) {
                     writeUTF16(buf, "");
                 } else {

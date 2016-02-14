@@ -23,7 +23,8 @@ import io.netty.buffer.ByteBuf;
 public class PacketOutClearNodes extends Packet {
 
     @Override
-    public void writeData(ByteBuf buf) {}
+    public void writeData(ByteBuf buf) {
+    }
 
     @Override
     public void readData(ByteBuf buf) {

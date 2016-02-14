@@ -22,7 +22,7 @@ import com.ogarproject.ogar.api.event.player.PlayerConnectedEvent;
 import com.ogarproject.ogar.api.event.player.PlayerConnectingEvent;
 import com.ogarproject.ogar.api.event.player.PlayerNameChangeEvent;
 import com.ogarproject.ogar.server.OgarServer;
-import com.ogarproject.ogar.server.entity.impl.CellEntityImpl;
+import com.ogarproject.ogar.server.entity.impl.CellImpl;
 import com.ogarproject.ogar.server.net.packet.inbound.PacketInToken;
 import com.ogarproject.ogar.server.net.packet.inbound.PacketInReleaseQ;
 import com.ogarproject.ogar.server.net.packet.inbound.PacketInMouseMove;
@@ -106,7 +106,7 @@ public class PlayerConnection {
             Ogar.getServer().getPluginManager().callEvent(event);
 
             player.setName(event.getName());
-            CellEntityImpl entity = OgarServer.getInstance().getWorld().spawnPlayerCell(player);
+            CellImpl entity = OgarServer.getInstance().getWorld().spawnPlayerCell(player);
             player.addCell(entity);
         }
     }
@@ -184,7 +184,7 @@ public class PlayerConnection {
     }
 
     public void handle(PacketOMPMessage packet) {
-        if (!player.isUsingOMP() && "OMP|Capable".equals(packet.channel)) {
+        if (!player.isPluginMessageCapable() && "OMP|Capable".equals(packet.channel)) {
             player.setOMPCapable(true);
         }
     }

@@ -25,7 +25,7 @@ public abstract class Packet {
     /**
      * Writes packet data, excluding the packet ID, to the specified buffer.
      * <p>
-     * 
+     *
      * @param buf
      */
     public abstract void writeData(ByteBuf buf);
@@ -33,7 +33,7 @@ public abstract class Packet {
     /**
      * Reads packet data, excluding the packet ID, from the specified buffer.
      * <p>
-     * 
+     *
      * @param buf
      */
     public abstract void readData(ByteBuf buf);

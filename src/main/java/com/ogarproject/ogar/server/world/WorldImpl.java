@@ -18,16 +18,17 @@ package com.ogarproject.ogar.server.world;
 
 import com.ogarproject.ogar.api.world.Position;
 import com.google.common.collect.ImmutableList;
+import com.ogarproject.ogar.api.CellOwner;
 import com.ogarproject.ogar.api.entity.Entity;
 import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.api.world.World;
 import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.config.OgarConfig;
 import com.ogarproject.ogar.server.entity.EntityImpl;
-import com.ogarproject.ogar.server.entity.impl.CellEntityImpl;
-import com.ogarproject.ogar.server.entity.impl.FoodEntityImpl;
-import com.ogarproject.ogar.server.entity.impl.MassEntityImpl;
-import com.ogarproject.ogar.server.entity.impl.VirusEntityImpl;
+import com.ogarproject.ogar.server.entity.impl.CellImpl;
+import com.ogarproject.ogar.server.entity.impl.FoodImpl;
+import com.ogarproject.ogar.server.entity.impl.MassImpl;
+import com.ogarproject.ogar.server.entity.impl.VirusImpl;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import java.util.Collection;
@@ -48,23 +49,25 @@ public class WorldImpl implements World {
         this.view = new View(server.getConfig());
     }
 
+    @Override
     public EntityImpl spawnEntity(EntityType type) {
         return spawnEntity(type, getRandomPosition());
     }
 
+    @Override
     public EntityImpl spawnEntity(EntityType type, Position position) {
         return spawnEntity(type, position, null);
     }
 
-    public CellEntityImpl spawnPlayerCell(PlayerImpl player) {
+    public CellImpl spawnPlayerCell(PlayerImpl player) {
         return spawnPlayerCell(player, getRandomPosition());
     }
 
-    public CellEntityImpl spawnPlayerCell(PlayerImpl player, Position position) {
-        return (CellEntityImpl) spawnEntity(EntityType.CELL, position, player);
+    public CellImpl spawnPlayerCell(PlayerImpl player, Position position) {
+        return (CellImpl) spawnEntity(EntityType.CELL, position, player);
     }
 
-    private EntityImpl spawnEntity(EntityType type, Position position, PlayerImpl owner) {
+    private EntityImpl spawnEntity(EntityType type, Position position, CellOwner owner) {
         if (type == null || position == null) {
             return null;
         }
@@ -76,16 +79,16 @@ public class WorldImpl implements World {
                     throw new IllegalArgumentException("Cell entities must have an owner");
                 }
 
-                entity = new CellEntityImpl(owner, this, position);
+                entity = new CellImpl(owner, this, position);
                 break;
             case FOOD:
-                entity = new FoodEntityImpl(this, position);
+                entity = new FoodImpl(this, position);
                 break;
             case MASS:
-                entity = new MassEntityImpl(this, position);
+                entity = new MassImpl(this, position);
                 break;
             case VIRUS:
-                entity = new VirusEntityImpl(this, position);
+                entity = new VirusImpl(this, position);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported entity type: " + type);
@@ -137,7 +140,7 @@ public class WorldImpl implements World {
     }
 
     public Position getRandomPosition() {
-        return new Position( (random.nextDouble() * (Math.abs(border.left) + Math.abs(border.right))) / 2.0D,
+        return new Position((random.nextDouble() * (Math.abs(border.left) + Math.abs(border.right))) / 2.0D,
                 (random.nextDouble() * (Math.abs(border.top) + Math.abs(border.bottom))) / 2.0D);
     }
 

@@ -28,6 +28,7 @@ public class PacketInSplit extends Packet {
     }
 
     @Override
-    public void readData(ByteBuf buf) {}
+    public void readData(ByteBuf buf) {
+    }
 
 }

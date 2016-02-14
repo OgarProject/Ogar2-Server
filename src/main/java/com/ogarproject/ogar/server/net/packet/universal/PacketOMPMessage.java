@@ -25,7 +25,8 @@ public class PacketOMPMessage extends Packet {
     public String channel;
     public byte[] data;
 
-    public PacketOMPMessage() {}
+    public PacketOMPMessage() {
+    }
 
     public PacketOMPMessage(String channel) {
         this.channel = channel;

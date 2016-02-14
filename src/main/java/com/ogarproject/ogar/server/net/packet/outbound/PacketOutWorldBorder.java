@@ -28,7 +28,8 @@ public class PacketOutWorldBorder extends Packet {
     public double right;
     public double bottom;
 
-    public PacketOutWorldBorder() {}
+    public PacketOutWorldBorder() {
+    }
 
     public PacketOutWorldBorder(WorldImpl.Border border) {
         this.left = border.getLeft();

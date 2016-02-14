@@ -55,7 +55,8 @@ public class PacketRegistry {
     }
 
     // Static-use class
-    private PacketRegistry() {}
+    private PacketRegistry() {
+    }
 
     public static class ProtocolDirection {
 

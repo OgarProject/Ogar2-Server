@@ -16,7 +16,7 @@
  */
 package com.ogarproject.ogar.server.entity.impl;
 
-import com.ogarproject.ogar.api.entity.CellEntity;
+import com.ogarproject.ogar.api.CellOwner;
 import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.server.world.PlayerImpl;
 import com.ogarproject.ogar.server.entity.EntityImpl;
@@ -26,14 +26,16 @@ import com.ogarproject.ogar.api.world.Position;
 import com.ogarproject.ogar.server.world.WorldImpl;
 import java.util.ArrayList;
 import java.util.List;
+import com.ogarproject.ogar.api.entity.Cell;
+import com.ogarproject.ogar.api.entity.Entity;
 
-public class CellEntityImpl extends EntityImpl implements CellEntity {
+public class CellImpl extends EntityImpl implements Cell {
 
-    private final PlayerImpl owner;
+    private final CellOwner owner;
     private String name;
     private long recombineTicks = 0;
 
-    public CellEntityImpl(PlayerImpl owner, WorldImpl world, Position position) {
+    public CellImpl(CellOwner owner, WorldImpl world, Position position) {
         super(EntityType.CELL, world, position);
         this.owner = owner;
         this.name = owner.getName();
@@ -45,15 +47,18 @@ public class CellEntityImpl extends EntityImpl implements CellEntity {
         return true;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    public PlayerImpl getOwner() {
+    @Override
+    public CellOwner getOwner() {
         return owner;
     }
 
@@ -80,11 +85,16 @@ public class CellEntityImpl extends EntityImpl implements CellEntity {
     }
 
     private void move() {
+        if (!(owner instanceof PlayerImpl)) {
+            return;
+        }
+
+        PlayerImpl player = (PlayerImpl) owner;
         int r = getPhysicalSize();
 
-        PlayerConnection.MousePosition mouse = getOwner().getConnection().getCellMousePosition(getID());
-        if (mouse == null || !getOwner().getConnection().isIndividualMovementEnabled()) {
-            mouse = getOwner().getConnection().getGlobalMousePosition();
+        PlayerConnection.MousePosition mouse = player.getConnection().getCellMousePosition(getID());
+        if (mouse == null || !player.getConnection().isIndividualMovementEnabled()) {
+            mouse = player.getConnection().getGlobalMousePosition();
             if (mouse == null) {
                 return;
             }
@@ -107,7 +117,7 @@ public class CellEntityImpl extends EntityImpl implements CellEntity {
         double y1 = getY() + (speed * Math.cos(angle));
 
         // Collision check for the owner's other cells
-        for (CellEntityImpl other : owner.getCells()) {
+        for (Cell other : owner.getCells()) {
             if (other.equals(this)) {
                 continue;
             }
@@ -122,8 +132,8 @@ public class CellEntityImpl extends EntityImpl implements CellEntity {
 
             if (distance < collisionDist) {
                 // Moving cell pushes collided cell
-                double newDeltaX = other.getX() - x1;
-                double newDeltaY = other.getY() - y1;
+                double newDeltaX = other.getPosition().getX() - x1;
+                double newDeltaY = other.getPosition().getY() - y1;
                 double newAngle = Math.atan2(newDeltaX, newDeltaY);
 
                 double move = collisionDist - distance + 5.0D;
@@ -159,12 +169,8 @@ public class CellEntityImpl extends EntityImpl implements CellEntity {
         double leftX = getX() - r;
         double rightX = getX() + r;
 
-        for (int otherId : owner.getTracker().getVisibleEntities()) {
-            EntityImpl other = world.getEntity(otherId);
-            if (other == null) {
-                continue;
-            }
-
+        for (Entity otherEntity : world.getEntities()) {
+            EntityImpl other = (EntityImpl) otherEntity;
             if (other.equals(this)) {
                 continue;
             }
@@ -174,13 +180,13 @@ public class CellEntityImpl extends EntityImpl implements CellEntity {
             }
 
             double multiplier = 1.25D;
-            if (other instanceof FoodEntityImpl) {
+            if (other instanceof FoodImpl) {
                 edibles.add(other);
                 continue;
-            } else if (other instanceof VirusEntityImpl) {
+            } else if (other instanceof VirusImpl) {
                 multiplier = 1.0D + (1D / 3D); // 1.3333...
-            } else if (other instanceof CellEntityImpl) {
-                CellEntityImpl otherCell = (CellEntityImpl) other;
+            } else if (other instanceof CellImpl) {
+                CellImpl otherCell = (CellImpl) other;
 
                 // Should we recombine?
                 if (owner.equals(otherCell.getOwner()) && recombineTicks == 0 && otherCell.getRecombineTicks() == 0) {
@@ -217,7 +223,7 @@ public class CellEntityImpl extends EntityImpl implements CellEntity {
         getOwner().removeCell(this);
     }
 
-    private boolean simpleCollide(CellEntityImpl other, double collisionDist) {
-        return MathHelper.fastAbs(getX() - other.getX()) < (2 * collisionDist) && MathHelper.fastAbs(getY() - other.getY()) < (2 * collisionDist);
+    private boolean simpleCollide(Cell other, double collisionDist) {
+        return MathHelper.fastAbs(getX() - other.getPosition().getX()) < (2 * collisionDist) && MathHelper.fastAbs(getY() - other.getPosition().getY()) < (2 * collisionDist);
     }
 }

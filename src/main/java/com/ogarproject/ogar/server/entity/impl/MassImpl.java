@@ -21,10 +21,10 @@ import com.ogarproject.ogar.server.entity.EntityImpl;
 import com.ogarproject.ogar.api.world.Position;
 import com.ogarproject.ogar.server.world.WorldImpl;
 
-public class VirusEntityImpl extends EntityImpl {
+public class MassImpl extends EntityImpl {
 
-    public VirusEntityImpl(WorldImpl world, Position position) {
-        super(EntityType.VIRUS, world, position);
+    public MassImpl(WorldImpl world, Position position) {
+        super(EntityType.MASS, world, position);
     }
 
     @Override

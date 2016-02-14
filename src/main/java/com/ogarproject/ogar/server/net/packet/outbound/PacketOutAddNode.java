@@ -24,7 +24,8 @@ public class PacketOutAddNode extends Packet {
 
     public int nodeId;
 
-    public PacketOutAddNode() {}
+    public PacketOutAddNode() {
+    }
 
     public PacketOutAddNode(int nodeId) {
         this.nodeId = nodeId;

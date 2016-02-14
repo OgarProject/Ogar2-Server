@@ -125,6 +125,7 @@ public abstract class EntityImpl implements Entity, Tickable {
         this.spiked = spiked;
     }
 
+    @Override
     public WorldImpl getWorld() {
         return world;
     }
@@ -147,7 +148,8 @@ public abstract class EntityImpl implements Entity, Tickable {
      */
     public abstract void tick();
 
-    public void onRemove() {}
+    public void onRemove() {
+    }
 
     @Override
     public int hashCode() {

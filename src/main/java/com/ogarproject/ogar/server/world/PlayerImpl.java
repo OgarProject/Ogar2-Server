@@ -16,10 +16,11 @@
  */
 package com.ogarproject.ogar.server.world;
 
+import com.google.common.collect.ImmutableSet;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Player;
 import com.ogarproject.ogar.server.net.PlayerConnection;
-import com.ogarproject.ogar.server.entity.impl.CellEntityImpl;
+import com.ogarproject.ogar.server.entity.impl.CellImpl;
 import com.ogarproject.ogar.server.net.packet.outbound.PacketOutAddNode;
 import com.ogarproject.ogar.server.net.packet.universal.PacketOMPMessage;
 import io.netty.channel.Channel;
@@ -29,11 +30,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import com.ogarproject.ogar.api.entity.Cell;
 
 public class PlayerImpl implements Player {
 
     private final PlayerConnection playerConnection;
-    private final Set<CellEntityImpl> cells = new HashSet<>();
+    private final Set<Cell> cells = new HashSet<>();
     private final PlayerTracker tracker;
     private String name;
     private boolean ompCapable;
@@ -43,6 +45,7 @@ public class PlayerImpl implements Player {
         this.tracker = new PlayerTracker(this);
     }
 
+    @Override
     public SocketAddress getAddress() {
         return this.playerConnection.getRemoteAddress();
     }
@@ -51,21 +54,23 @@ public class PlayerImpl implements Player {
         return this.playerConnection;
     }
 
-    public void addCell(CellEntityImpl cell) {
+    @Override
+    public void addCell(Cell cell) {
         cells.add(cell);
         tracker.updateView();
         tracker.updateNodes();
         playerConnection.sendPacket(new PacketOutAddNode(cell.getID()));
     }
 
-    public void removeCell(CellEntityImpl cell) {
+    @Override
+    public void removeCell(Cell cell) {
         cells.remove(cell);
         tracker.updateView();
         tracker.updateNodes();
     }
 
     public void removeCell(int entityId) {
-        Iterator<CellEntityImpl> it = cells.iterator();
+        Iterator<Cell> it = cells.iterator();
         while (it.hasNext()) {
             if (it.next().getID() == entityId) {
                 it.remove();
@@ -73,8 +78,9 @@ public class PlayerImpl implements Player {
         }
     }
 
-    public Collection<CellEntityImpl> getCells() {
-        return cells;
+    @Override
+    public Collection<Cell> getCells() {
+        return ImmutableSet.copyOf(cells);
     }
 
     @Override
@@ -92,7 +98,7 @@ public class PlayerImpl implements Player {
     }
 
     @Override
-    public boolean isUsingOMP() {
+    public boolean isPluginMessageCapable() {
         return ompCapable;
     }
 
@@ -124,7 +130,7 @@ public class PlayerImpl implements Player {
 
     @Override
     public boolean sendPluginMessage(String channel, byte[] data) {
-        if (!isUsingOMP()) {
+        if (!isPluginMessageCapable()) {
             return false;
         }
 

@@ -28,6 +28,7 @@ public class PacketInEjectMass extends Packet {
     }
 
     @Override
-    public void readData(ByteBuf buf) {}
+    public void readData(ByteBuf buf) {
+    }
 
 }
