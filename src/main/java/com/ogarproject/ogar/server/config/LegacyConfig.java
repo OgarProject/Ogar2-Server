@@ -43,6 +43,11 @@ public class LegacyConfig {
         cfg.world.border.right = Double.parseDouble(props.getProperty("borderRight"));
         cfg.world.border.top = Double.parseDouble(props.getProperty("borderTop"));
         cfg.world.border.bottom = Double.parseDouble(props.getProperty("borderBottom"));
+        
+        cfg.world.food.spawnInterval = Integer.parseInt(props.getProperty("spawnInterval"));
+        cfg.world.food.spawnPerInterval = Integer.parseInt(props.getProperty("foodSpawnAmount"));
+        cfg.world.food.startAmount = Integer.parseInt(props.getProperty("foodStartAmount"));
+        cfg.world.food.maxAmount = Integer.parseInt(props.getProperty("foodMaxAmount"));
 
         cfg.player.startMass = Integer.parseInt(props.getProperty("playerStartMass"));
         cfg.player.maxMass = Integer.parseInt(props.getProperty("playerMaxMass"));

@@ -29,24 +29,31 @@ public class PacketOutUpdateNodes extends Packet {
 
     private final WorldImpl world;
     private final Collection<EntityImpl> removals;
-    private final Collection<EntityImpl> removalsByEating;
     private final Collection<Integer> updates;
 
-    public PacketOutUpdateNodes(WorldImpl world, Collection<EntityImpl> removals, Collection<EntityImpl> removalsByEating, Collection<Integer> updates) {
+    public PacketOutUpdateNodes(WorldImpl world, Collection<EntityImpl> removals, Collection<Integer> updates) {
         this.world = world;
         this.removals = removals;
-        this.removalsByEating = removalsByEating;
         this.updates = updates;
     }
 
     @Override
     public void writeData(ByteBuf buf) {
         // Removals by eating
-        buf.writeShort(removalsByEating.size());
-        for (EntityImpl entity : removalsByEating) {
-            buf.writeInt(entity.getConsumer());
-            buf.writeInt(entity.getID());
+        int lengthIndex = buf.writerIndex();
+        int eaten = 0;
+        buf.writerIndex(lengthIndex + 2);
+        for (EntityImpl entity : removals) {
+            if (entity.getConsumer() > 0) {
+                eaten++;
+                buf.writeInt(entity.getConsumer());
+                buf.writeInt(entity.getID());
+            }
         }
+        buf.markWriterIndex();
+        buf.writerIndex(lengthIndex);
+        buf.writeShort(eaten);
+        buf.resetWriterIndex();
 
         // Updates
         for (int id : updates) {

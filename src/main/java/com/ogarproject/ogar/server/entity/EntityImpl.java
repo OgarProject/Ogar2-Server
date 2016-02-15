@@ -19,7 +19,6 @@ package com.ogarproject.ogar.server.entity;
 import com.ogarproject.ogar.api.entity.Entity;
 import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.server.tick.Tickable;
-import com.ogarproject.ogar.server.world.PlayerImpl;
 import com.ogarproject.ogar.api.world.Position;
 import com.ogarproject.ogar.server.world.WorldImpl;
 import java.awt.Color;
@@ -80,9 +79,6 @@ public abstract class EntityImpl implements Entity, Tickable {
     public void kill(int consumer) {
         this.consumer = consumer;
         world.removeEntity(this);
-
-        world.getServer().getPlayerList().getAllPlayers().stream().map(PlayerImpl::getTracker).filter((t) -> t.getVisibleEntities().contains(getID()))
-                .forEach((t) -> t.removeByEating(this));
     }
 
     @Override

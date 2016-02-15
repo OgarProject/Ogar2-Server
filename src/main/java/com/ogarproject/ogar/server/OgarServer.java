@@ -174,7 +174,7 @@ public class OgarServer implements Server {
     private void run() {
         Calendar expiryDate = Calendar.getInstance();
         expiryDate.clear();
-        expiryDate.set(2016, 2, 21);
+        expiryDate.set(2016, 2, 22);
         if (Calendar.getInstance().after(expiryDate)) {
             log.warning("It looks like you may be using an outdated version of Ogar 2.");
             log.warning("Please check http://www.ogarproject.com for a new version.");
@@ -249,10 +249,8 @@ public class OgarServer implements Server {
                 long startTime = System.currentTimeMillis();
                 tick++;
 
-                // Entity ticking
-                for (EntityImpl entity : world.getRawEntities()) {
-                    tick(entity);
-                }
+                // Tick the world
+                world.tick(this::tick);
 
                 // Update nodes
                 for (PlayerImpl player : playerList.getAllPlayers()) {

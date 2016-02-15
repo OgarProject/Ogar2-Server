@@ -52,7 +52,7 @@ public class PlayerTracker {
         this.world = OgarServer.getInstance().getWorld();
     }
 
-    public void removeByEating(EntityImpl entity) {
+    public void remove(EntityImpl entity) {
         if (!removalQueue.contains(entity)) {
             removalQueue.add(entity);
         }
@@ -114,10 +114,8 @@ public class PlayerTracker {
     public void updateNodes() {
         // Process the removal queue
         Set<Integer> updates = new HashSet<>();
-        Set<EntityImpl> removalsByEating = new HashSet<>();
         Set<EntityImpl> removals = new HashSet<>();
         synchronized (removalQueue) {
-            removalsByEating.addAll(removalQueue);
             removals.addAll(removalQueue);
             removalQueue.clear();
         }
@@ -165,6 +163,6 @@ public class PlayerTracker {
             }
         }
 
-        conn.sendPacket(new PacketOutUpdateNodes(world, removals, removalsByEating, updates));
+        conn.sendPacket(new PacketOutUpdateNodes(world, removals, updates));
     }
 }

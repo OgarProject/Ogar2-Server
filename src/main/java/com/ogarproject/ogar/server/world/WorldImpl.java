@@ -24,22 +24,27 @@ import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.api.world.World;
 import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.config.OgarConfig;
+import com.ogarproject.ogar.server.config.OgarConfig.World.Food;
 import com.ogarproject.ogar.server.entity.EntityImpl;
 import com.ogarproject.ogar.server.entity.impl.CellImpl;
 import com.ogarproject.ogar.server.entity.impl.FoodImpl;
 import com.ogarproject.ogar.server.entity.impl.MassImpl;
 import com.ogarproject.ogar.server.entity.impl.VirusImpl;
+import com.ogarproject.ogar.server.tick.Tickable;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class WorldImpl implements World {
 
-    private static final Random random = new Random();
+    private final Random random = new Random(System.nanoTime());
     private final OgarServer server;
     private final TIntObjectMap<EntityImpl> entities = new TIntObjectHashMap<>();
+    private final int[] entityCounts = new int[EntityType.values().length];
+    private int totalEntities = 0;
     private final Border border;
     private final View view;
 
@@ -47,6 +52,10 @@ public class WorldImpl implements World {
         this.server = server;
         this.border = new Border(server.getConfig());
         this.view = new View(server.getConfig());
+        
+        for (int i = 0; i < server.getConfig().world.food.startAmount; i++) {
+            spawnEntity(EntityType.FOOD);
+        }
     }
 
     @Override
@@ -95,6 +104,8 @@ public class WorldImpl implements World {
         }
 
         entities.put(entity.getID(), entity);
+        entityCounts[type.ordinal()]++;
+        totalEntities++;
         return entity;
     }
 
@@ -109,7 +120,13 @@ public class WorldImpl implements World {
             throw new IllegalArgumentException("Entity with the specified ID does not exist in the world!");
         }
 
-        entities.remove(id).onRemove();
+        EntityImpl entity = entities.remove(id);
+        entity.onRemove();
+        entityCounts[entity.getType().ordinal()]--;
+        totalEntities--;
+        
+        // TODO: Limit to viewbox?
+        server.getPlayerList().getAllPlayers().stream().map(PlayerImpl::getTracker).forEach((t) -> t.remove(entity));
     }
 
     @Override
@@ -124,6 +141,22 @@ public class WorldImpl implements World {
     @Override
     public Collection<Entity> getEntities() {
         return ImmutableList.copyOf(entities.valueCollection());
+    }
+    
+    public int getCellCount() {
+        return entityCounts[EntityType.CELL.ordinal()];
+    }
+    
+    public int getFoodCount() {
+        return entityCounts[EntityType.FOOD.ordinal()];
+    }
+    
+    public int getVirusCount() {
+        return entityCounts[EntityType.VIRUS.ordinal()];
+    }
+    
+    public int getMassCount() {
+        return entityCounts[EntityType.MASS.ordinal()];
     }
 
     public Border getBorder() {
@@ -140,8 +173,26 @@ public class WorldImpl implements World {
     }
 
     public Position getRandomPosition() {
-        return new Position((random.nextDouble() * (Math.abs(border.left) + Math.abs(border.right))) / 2.0D,
-                (random.nextDouble() * (Math.abs(border.top) + Math.abs(border.bottom))) / 2.0D);
+        return new Position((random.nextDouble() * (Math.abs(border.left) + Math.abs(border.right))),
+                (random.nextDouble() * (Math.abs(border.top) + Math.abs(border.bottom))));
+    }
+
+    private void spawnFood() {
+        int spawnedFood = 0;
+        while (getFoodCount() < server.getConfig().world.food.maxAmount && spawnedFood < server.getConfig().world.food.spawnPerInterval) {
+            spawnEntity(EntityType.FOOD);
+            spawnedFood++;
+        }
+    }
+
+    public void tick(Consumer<Tickable> serverTick) {
+        if (server.getTick() % server.getConfig().world.food.spawnInterval == 0) {
+            spawnFood();
+        }
+
+        for (EntityImpl entity : entities.valueCollection()) {
+            serverTick.accept(entity);
+        }
     }
 
     public static class View {

@@ -32,6 +32,7 @@ public class OgarConfig extends JsonConfiguration {
 
         public View view = new View();
         public Border border = new Border();
+        public Food food = new Food();
 
         public static class View {
 
@@ -45,6 +46,14 @@ public class OgarConfig extends JsonConfiguration {
             public double right = 6000;
             public double top = 0;
             public double bottom = 6000;
+        }
+        
+        public static class Food {
+            
+            public int spawnInterval = 20; // In ticks
+            public int spawnPerInterval = 10; // How many food to spawn per interval
+            public int startAmount = 100; // The amount of food to start the world with
+            public int maxAmount = 500; // The maximum amount of food in the world at once
         }
     }
 
