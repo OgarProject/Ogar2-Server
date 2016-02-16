@@ -44,17 +44,19 @@ public class WebSocketHandler extends SimpleChannelInboundHandler {
             // AGAINST YOU. THIS SECTION OF CODE WAS ADDED ON JULY 9, 2015 AT THE REQUEST
             // OF THE AGAR.IO DEVELOPERS.
             String origin = request.headers().get(HttpHeaders.ORIGIN);
-            switch (origin) {
-                case "http://agar.io":
-                case "https://agar.io":
-                case "http://localhost":
-                case "https://localhost":
-                case "http://127.0.0.1":
-                case "https://127.0.0.1":
-                    break;
-                default:
-                    ctx.channel().close();
-                    return;
+            if (origin != null) {
+                switch (origin) {
+                    case "http://agar.io":
+                    case "https://agar.io":
+                    case "http://localhost":
+                    case "https://localhost":
+                    case "http://127.0.0.1":
+                    case "https://127.0.0.1":
+                        break;
+                    default:
+                        ctx.channel().close();
+                        return;
+                }
             }
             // -----/Client authenticity check code -----
 
