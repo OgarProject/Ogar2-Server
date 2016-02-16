@@ -22,13 +22,14 @@ import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Server;
 import com.ogarproject.ogar.api.plugin.Messenger;
 import com.ogarproject.ogar.api.plugin.PluginManager;
+import com.ogarproject.ogar.api.plugin.Scheduler;
 import com.ogarproject.ogar.server.config.OgarConfig;
 import com.ogarproject.ogar.server.config.JsonConfiguration;
 import com.ogarproject.ogar.server.config.LegacyConfig;
-import com.ogarproject.ogar.server.entity.EntityImpl;
 import com.ogarproject.ogar.server.gui.ServerCLI;
 import com.ogarproject.ogar.server.gui.ServerGUI;
 import com.ogarproject.ogar.server.net.NetworkManager;
+import com.ogarproject.ogar.server.plugin.SimpleScheduler;
 import com.ogarproject.ogar.server.tick.TickWorker;
 import com.ogarproject.ogar.server.tick.Tickable;
 import com.ogarproject.ogar.server.tick.TickableSupplier;
@@ -58,12 +59,13 @@ public class OgarServer implements Server {
     private final boolean debugMode = Boolean.getBoolean("debug");
     private final Set<TickWorker> tickWorkers = new HashSet<>();
     private final Messenger messenger = new Messenger();
+    private final SimpleScheduler scheduler = new SimpleScheduler(this);
     private int tickThreads = Integer.getInteger("tickThreads", 1);
     private NetworkManager networkManager;
     private PluginManager pluginManager;
     private WorldImpl world;
     private OgarConfig configuration;
-    private long tick = 0;
+    private long tick = 0L;
     private boolean running;
 
     public static void main(String[] args) throws Throwable {
@@ -97,6 +99,11 @@ public class OgarServer implements Server {
     @Override
     public Messenger getMessenger() {
         return messenger;
+    }
+    
+    @Override
+    public Scheduler getScheduler() {
+        return scheduler;
     }
 
     public boolean isDebugging() {
@@ -285,6 +292,9 @@ public class OgarServer implements Server {
 
                 // Wait for the tick workers to finish
                 tickWorkers.forEach(TickWorker::waitForCompletion);
+                
+                // Tick the plugin scheduler
+                scheduler.serverTick(tick);
 
                 long tickDuration = System.currentTimeMillis() - startTime;
                 if (tickDuration < 50) {
