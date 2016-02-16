@@ -26,6 +26,8 @@ import com.ogarproject.ogar.server.config.OgarConfig;
 import com.ogarproject.ogar.server.config.JsonConfiguration;
 import com.ogarproject.ogar.server.config.LegacyConfig;
 import com.ogarproject.ogar.server.entity.EntityImpl;
+import com.ogarproject.ogar.server.gui.ServerCLI;
+import com.ogarproject.ogar.server.gui.ServerGUI;
 import com.ogarproject.ogar.server.net.NetworkManager;
 import com.ogarproject.ogar.server.tick.TickWorker;
 import com.ogarproject.ogar.server.tick.Tickable;
@@ -62,6 +64,7 @@ public class OgarServer implements Server {
     private WorldImpl world;
     private OgarConfig configuration;
     private long tick = 0;
+    private boolean running;
 
     public static void main(String[] args) throws Throwable {
         OgarServer.instance = new OgarServer();
@@ -172,6 +175,16 @@ public class OgarServer implements Server {
     }
 
     private void run() {
+        if (ServerGUI.isHeadless()) {
+            // Set up jline for the terminal
+            Thread thread = new Thread(new ServerCLI(this), "Console Command Handler");
+            thread.setDaemon(true);
+            thread.start();
+        } else {
+            // Spawn a user-friendly GUI
+            ServerGUI.spawn(this);
+        }
+
         Calendar expiryDate = Calendar.getInstance();
         expiryDate.clear();
         expiryDate.set(2016, 2, 22);
@@ -236,13 +249,26 @@ public class OgarServer implements Server {
             networkManager.start();
         } catch (IOException | InterruptedException ex) {
             log.log(Level.SEVERE, "Failed to start server!", ex);
-            System.exit(1);
+            if (ServerGUI.isSpawned()) {
+                // Don't instantly close the console
+                while (true) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException rekt) {
+                        System.exit(1);
+                    }
+                }
+            } else {
+                // Instantly close - non-GUI users will probably be able to see the logs
+                System.exit(1);
+            }
         }
 
         // Start the tick workers
         tickWorkers.forEach(TickWorker::start);
 
-        while (true) {
+        running = true;
+        while (running) {
             try {
                 // To make the tick loop adaptive, we measure the start and end times.
                 // This allows us to ensure that there is around 20 ticks per second.
@@ -289,6 +315,32 @@ public class OgarServer implements Server {
         pluginManager.disablePlugins();
 
         log.info("Goodbye!");
+    }
+
+    public void handleCommand(String s) {
+        s = s.trim();
+        if (s.isEmpty()) {
+            return;
+        }
+
+        // TODO: More modular system for command handling
+        switch (s.toLowerCase()) {
+            case "help":
+                log.info("Command listing:");
+                log.info("\thelp\t\tShows this listing.");
+                log.info("\tstop\t\tShuts down the server.");
+                break;
+            case "stop":
+                shutdown();
+                break;
+            default:
+                log.info("Unknown command. Type \"help\" for help.");
+                break;
+        }
+    }
+
+    public void shutdown() {
+        running = false;
     }
 
     private void tick(Tickable... tickables) {

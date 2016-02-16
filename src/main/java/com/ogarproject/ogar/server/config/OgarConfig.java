@@ -47,9 +47,9 @@ public class OgarConfig extends JsonConfiguration {
             public double top = 0;
             public double bottom = 6000;
         }
-        
+
         public static class Food {
-            
+
             public int spawnInterval = 20; // In ticks
             public int spawnPerInterval = 10; // How many food to spawn per interval
             public int startAmount = 100; // The amount of food to start the world with

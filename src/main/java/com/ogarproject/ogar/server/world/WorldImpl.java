@@ -52,7 +52,7 @@ public class WorldImpl implements World {
         this.server = server;
         this.border = new Border(server.getConfig());
         this.view = new View(server.getConfig());
-        
+
         for (int i = 0; i < server.getConfig().world.food.startAmount; i++) {
             spawnEntity(EntityType.FOOD);
         }
@@ -124,7 +124,7 @@ public class WorldImpl implements World {
         entity.onRemove();
         entityCounts[entity.getType().ordinal()]--;
         totalEntities--;
-        
+
         // TODO: Limit to viewbox?
         server.getPlayerList().getAllPlayers().stream().map(PlayerImpl::getTracker).forEach((t) -> t.remove(entity));
     }
@@ -142,19 +142,19 @@ public class WorldImpl implements World {
     public Collection<Entity> getEntities() {
         return ImmutableList.copyOf(entities.valueCollection());
     }
-    
+
     public int getCellCount() {
         return entityCounts[EntityType.CELL.ordinal()];
     }
-    
+
     public int getFoodCount() {
         return entityCounts[EntityType.FOOD.ordinal()];
     }
-    
+
     public int getVirusCount() {
         return entityCounts[EntityType.VIRUS.ordinal()];
     }
-    
+
     public int getMassCount() {
         return entityCounts[EntityType.MASS.ordinal()];
     }
