@@ -78,7 +78,7 @@ public class ServerGUI {
     }
 
     public static boolean isHeadless() {
-        return GraphicsEnvironment.isHeadless() || System.console() != null || Boolean.getBoolean("nogui");
+        return !Boolean.getBoolean("forcegui") && (GraphicsEnvironment.isHeadless() || System.console() != null || Boolean.getBoolean("nogui"));
     }
 
     public static boolean isSpawned() {
