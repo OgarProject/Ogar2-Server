@@ -103,6 +103,10 @@ public class ServerGUI {
         @Override
         public void write(int b) throws IOException {
             buffer.append((char) b);
+            if ((char) b == '\n') {
+                // Hackish workaround for System.out.println() (ab)users to work properly
+                flush();
+            }
         }
 
         @Override
