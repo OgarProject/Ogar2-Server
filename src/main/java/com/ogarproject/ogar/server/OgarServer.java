@@ -194,7 +194,7 @@ public class OgarServer implements Server {
 
         Calendar expiryDate = Calendar.getInstance();
         expiryDate.clear();
-        expiryDate.set(2016, 2, 22);
+        expiryDate.set(2016, 2, 29);
         if (Calendar.getInstance().after(expiryDate)) {
             log.warning("It looks like you may be using an outdated version of Ogar 2.");
             log.warning("Please check http://www.ogarproject.com for a new version.");
