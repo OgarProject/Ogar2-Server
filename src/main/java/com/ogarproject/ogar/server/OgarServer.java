@@ -195,7 +195,7 @@ public class OgarServer implements Server {
         pluginManager = new PluginManager(this);
 
         setupLogging();
-        log.info("SkorrloreGaming-Productions - Modified Ogar 2 starting."+ChatColor.RESET);
+        log.info("Ogar 2 starting."+ChatColor.RESET);
         if (debugMode) {
             log.info("Debug mode is enabled; additional information will be logged.");
         }
