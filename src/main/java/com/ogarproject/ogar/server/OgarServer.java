@@ -18,12 +18,12 @@ package com.ogarproject.ogar.server;
 
 import com.ogarproject.ogar.server.world.WorldImpl;
 import com.skorrloregaming.main.Commands;
-import com.skorrloregaming.main.Configuration;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Server;
 import com.ogarproject.ogar.api.plugin.Messenger;
 import com.ogarproject.ogar.api.plugin.PluginManager;
 import com.ogarproject.ogar.api.plugin.Scheduler;
+import com.ogarproject.ogar.server.config.Configuration;
 import com.ogarproject.ogar.server.config.OgarConfig;
 import com.ogarproject.ogar.server.gui.ServerCLI;
 import com.ogarproject.ogar.server.gui.ServerGUI;
