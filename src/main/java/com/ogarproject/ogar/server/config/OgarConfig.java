@@ -24,8 +24,10 @@ public class OgarConfig extends JsonConfiguration {
 
     public static class Server {
 
-        public int port = 443;
+        public int port = 4411;
         public int maxConnections = 100;
+        public String ip = "localhost";
+        
     }
 
     public static class World {
@@ -59,7 +61,7 @@ public class OgarConfig extends JsonConfiguration {
 
     public static class Player {
 
-        public int startMass = 10;
+        public int startMass = 35;
         public int maxMass = 22500;
         public int minMassEject = 32;
         public int minMassSplit = 36;

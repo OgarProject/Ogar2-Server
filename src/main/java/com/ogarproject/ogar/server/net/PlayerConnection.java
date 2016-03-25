@@ -151,16 +151,12 @@ public class PlayerConnection {
         Preconditions.checkState(state == ConnectionState.TOKEN, "Not expecting TOKEN");
         state = ConnectionState.CONNECTED;
         authToken = packet.token;
-
-        // Check if a plugin wants to cancel the connection
         PlayerConnectingEvent connectingEvent = new PlayerConnectingEvent(player.getAddress(), protocolVersion, authToken);
         Ogar.getServer().getPluginManager().callEvent(connectingEvent);
         if (connectingEvent.isCancelled()) {
             channel.close();
             return;
         }
-
-        // Player connected, notify plugins
         PlayerConnectedEvent connectedEvent = new PlayerConnectedEvent(player);
         Ogar.getServer().getPluginManager().callEvent(connectedEvent);
     }
