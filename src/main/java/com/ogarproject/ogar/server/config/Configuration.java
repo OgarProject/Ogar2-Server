@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Ogar.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+package com.ogarproject.ogar.server.config;
 
 import java.io.FileReader;
 import java.util.Properties;
