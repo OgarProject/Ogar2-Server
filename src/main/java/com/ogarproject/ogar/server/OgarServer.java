@@ -17,6 +17,8 @@
 package com.ogarproject.ogar.server;
 
 import com.ogarproject.ogar.server.world.WorldImpl;
+import com.skorrloregaming.main.Commands;
+import com.skorrloregaming.main.Configuration;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Server;
 import com.ogarproject.ogar.api.plugin.Messenger;
@@ -45,9 +47,6 @@ import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-
-import org.skorrloregaming.ogar.main.Commands;
-import org.skorrloregaming.ogar.main.Configuration;
 
 public class OgarServer implements Server {
 
@@ -142,7 +141,6 @@ public class OgarServer implements Server {
 
     public void loadConfig() {
         this.configuration = Configuration.load(configurationFile);
-        log.info("Loaded configuration from " + configurationFile + ".");
     }
 
     public void saveConfig() {

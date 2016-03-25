@@ -24,7 +24,7 @@ public class OgarConfig extends JsonConfiguration {
 
     public static class Server {
 
-        public int port = 4411;
+        public int port = 443;
         public int maxConnections = 100;
         public String ip = "localhost";
         
