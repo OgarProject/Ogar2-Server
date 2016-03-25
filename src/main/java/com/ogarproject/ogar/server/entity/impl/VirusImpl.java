@@ -17,10 +17,10 @@
 package com.ogarproject.ogar.server.entity.impl;
 
 import com.ogarproject.ogar.api.entity.EntityType;
+import com.ogarproject.ogar.api.entity.Virus;
 import com.ogarproject.ogar.server.entity.EntityImpl;
 import com.ogarproject.ogar.api.world.Position;
 import com.ogarproject.ogar.server.world.WorldImpl;
-import com.ogarproject.ogar.api.entity.Virus;
 
 public class VirusImpl extends EntityImpl implements Virus {
 
