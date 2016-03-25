@@ -23,6 +23,7 @@ import com.ogarproject.ogar.server.net.packet.Packet;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientHandler extends SimpleChannelInboundHandler<Packet> {
 
@@ -43,7 +44,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Packet> {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         PlayerDisconnectEvent event = new PlayerDisconnectEvent(player);
         server.getPluginManager().callEvent(event);
-
         server.getPlayerList().removePlayer(player);
     }
 

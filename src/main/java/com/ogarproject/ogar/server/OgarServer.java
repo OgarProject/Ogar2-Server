@@ -17,7 +17,6 @@
 package com.ogarproject.ogar.server;
 
 import com.ogarproject.ogar.server.world.WorldImpl;
-import com.google.common.base.Throwables;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Server;
 import com.ogarproject.ogar.api.plugin.Messenger;
@@ -38,7 +37,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,6 +47,9 @@ import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+
+import org.skorrloregaming.ogar.main.Commands;
+import org.skorrloregaming.ogar.text.ChatColor;
 
 public class OgarServer implements Server {
 
@@ -183,34 +184,18 @@ public class OgarServer implements Server {
 
     private void run() {
         if (ServerGUI.isHeadless()) {
-            // Set up jline for the terminal
             Thread thread = new Thread(new ServerCLI(this), "Console Command Handler");
             thread.setDaemon(true);
             thread.start();
         } else {
-            // Spawn a user-friendly GUI
             ServerGUI.spawn(this);
-        }
-
-        Calendar expiryDate = Calendar.getInstance();
-        expiryDate.clear();
-        expiryDate.set(2016, 2, 29);
-        if (Calendar.getInstance().after(expiryDate)) {
-            log.warning("It looks like you may be using an outdated version of Ogar 2.");
-            log.warning("Please check http://www.ogarproject.com for a new version.");
-            log.warning("The server will start in 10 seconds.");
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException ex) {
-                //
-            }
         }
 
         Ogar.setServer(this);
         pluginManager = new PluginManager(this);
 
         setupLogging();
-        log.info("Ogar Server starting.");
+        log.info("Ogar 2 starting."+ChatColor.RESET);
         if (debugMode) {
             log.info("Debug mode is enabled; additional information will be logged.");
         }
@@ -219,7 +204,6 @@ public class OgarServer implements Server {
         if (tickThreads < 1) {
             tickThreads = 1;
         }
-        log.info("Running server with " + tickThreads + " tick thread(s).");
         if (tickThreads > 1) {
             log.warning("Use of multiple tick threads is experimental and may be unstable!");
         }
@@ -242,7 +226,6 @@ public class OgarServer implements Server {
             if (!pluginDirectory.exists()) {
                 pluginDirectory.mkdirs();
             }
-
             pluginManager.loadPlugins(pluginDirectory);
         } catch (Throwable t) {
             log.log(Level.SEVERE, "Failed to load plugins", t);
@@ -255,18 +238,10 @@ public class OgarServer implements Server {
         try {
             networkManager.start();
         } catch (IOException | InterruptedException ex) {
-            log.log(Level.SEVERE, "Failed to start server!", ex);
+            log.info("Failed to start server! "+ex.getMessage());
             if (ServerGUI.isSpawned()) {
-                // Don't instantly close the console
-                while (true) {
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException rekt) {
-                        System.exit(1);
-                    }
-                }
+            	System.exit(1);
             } else {
-                // Instantly close - non-GUI users will probably be able to see the logs
                 System.exit(1);
             }
         }
@@ -312,19 +287,23 @@ public class OgarServer implements Server {
 
         // Shut down tick workers
         // We initiate all shutdowns before waiting on them to reduce shutdown time
-        log.info("Shutting down tick workers...");
         tickWorkers.forEach(TickWorker::shutdownGracefully);
         tickWorkers.forEach(TickWorker::waitForShutdown);
 
         // Shut down network manager
-        log.info("Shutting down network manager...");
         networkManager.shutdown();
 
         // Disable plugins
         log.info("Disabling plugins...");
         pluginManager.disablePlugins();
 
-        log.info("Goodbye!");
+        log.info("Successfully stopped server!");
+        try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        System.exit(-1);
     }
 
     public void handleCommand(String s) {
@@ -332,21 +311,7 @@ public class OgarServer implements Server {
         if (s.isEmpty()) {
             return;
         }
-
-        // TODO: More modular system for command handling
-        switch (s.toLowerCase()) {
-            case "help":
-                log.info("Command listing:");
-                log.info("\thelp\t\tShows this listing.");
-                log.info("\tstop\t\tShuts down the server.");
-                break;
-            case "stop":
-                shutdown();
-                break;
-            default:
-                log.info("Unknown command. Type \"help\" for help.");
-                break;
-        }
+        Commands.onCommand(s);
     }
 
     public void shutdown() {
@@ -389,9 +354,6 @@ public class OgarServer implements Server {
             sb.append("] ");
             sb.append(formatMessage(record));
             sb.append('\n');
-            if (record.getThrown() != null) {
-                sb.append(Throwables.getStackTraceAsString(record.getThrown()));
-            }
             return sb.toString();
         }
     }

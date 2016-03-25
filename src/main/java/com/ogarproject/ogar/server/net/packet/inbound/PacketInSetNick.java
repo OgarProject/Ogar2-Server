@@ -31,7 +31,11 @@ public class PacketInSetNick extends Packet {
 
     @Override
     public void readData(ByteBuf buf) {
-        nickname = readUTF16(buf);
+    	String preset = readUTF16(buf);
+    	if (preset.equalsIgnoreCase("")){
+    		preset = "An unnamed cell";
+    	}
+        nickname = preset;
     }
 
 }
