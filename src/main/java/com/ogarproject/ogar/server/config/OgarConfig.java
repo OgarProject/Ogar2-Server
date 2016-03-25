@@ -16,7 +16,7 @@
  */
 package com.ogarproject.ogar.server.config;
 
-public class OgarConfig extends JsonConfiguration {
+public class OgarConfig {
 
     public Server server = new Server();
     public World world = new World();

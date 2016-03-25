@@ -1,4 +1,4 @@
-package com.skorrloregaming.main;
+package com.ogarproject.ogar.server.config;
 /**
  * This file is part of Ogar.
  *
@@ -19,8 +19,6 @@ package com.skorrloregaming.main;
 
 import java.io.FileReader;
 import java.util.Properties;
-
-import com.ogarproject.ogar.server.config.OgarConfig;
 
 import jline.internal.Log;
 

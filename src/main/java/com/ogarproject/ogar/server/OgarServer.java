@@ -18,12 +18,12 @@ package com.ogarproject.ogar.server;
 
 import com.ogarproject.ogar.server.world.WorldImpl;
 import com.skorrloregaming.main.Commands;
-import com.skorrloregaming.main.Configuration;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Server;
 import com.ogarproject.ogar.api.plugin.Messenger;
 import com.ogarproject.ogar.api.plugin.PluginManager;
 import com.ogarproject.ogar.api.plugin.Scheduler;
+import com.ogarproject.ogar.server.config.Configuration;
 import com.ogarproject.ogar.server.config.OgarConfig;
 import com.ogarproject.ogar.server.gui.ServerCLI;
 import com.ogarproject.ogar.server.gui.ServerGUI;
@@ -144,11 +144,8 @@ public class OgarServer implements Server {
     }
 
     public void saveConfig() {
-        if (configuration == null) {
-            configuration = new OgarConfig();
-        }
-        configuration.save(new File(configurationFile));
-        log.info("Saved configuration to " + configurationFile + ".");
+        log.info("The default configuration file could not be found!");
+        shutdown();
     }
 
     public OgarConfig getConfig() {
