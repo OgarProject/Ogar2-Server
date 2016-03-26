@@ -3,6 +3,7 @@
 Thank you for being interested in the OgarioProject also known as Lar.io.
 
 Downloads: http://ci.thundergemios10.com/job/Ogar2-Server/
+Alternative Downloads: http://skorrloregaming.zapto.org/ogario-project/
 
 (**NOTE:** This are experimental builds! We cannot gurrantee that it will work at all!)
 
@@ -10,13 +11,13 @@ Downloads: http://ci.thundergemios10.com/job/Ogar2-Server/
 * Eating/Growing
 * PvP
 * Logging in with Google.
-* Splitting (Alpha)
+* Splitting (Beta)
+* Ejecting (Beta)
 
 # Issues:
 * No multi-colored food.
 * No scoreboard.
 * No bot system.
-* No ejecting.
 * Entities sometimes not deleting properly from map.
 
 # Team Members:
