@@ -29,6 +29,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Packet> {
 
     private final OgarServer server;
     private PlayerImpl player;
+    
+    static Logger log = Logger.getGlobal();
 
     public ClientHandler(OgarServer server) {
         this.server = server;
@@ -54,7 +56,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Packet> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        server.getLogger().log(Level.SEVERE, "Encountered exception in pipeline for client at " + ctx.channel().remoteAddress() + "; disconnecting client.", cause);
-        ctx.channel().close();
+        //server.getLogger().log(Level.SEVERE, "Encountered exception in pipeline for client at " + ctx.channel().remoteAddress() + "; disconnecting client.", cause);
+        //ctx.channel().close();
     }
 }

@@ -44,6 +44,7 @@ import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class PlayerConnection {
 
@@ -55,6 +56,8 @@ public class PlayerConnection {
     private ConnectionState state = ConnectionState.AUTHENTICATE;
     private int protocolVersion;
     private String authToken;
+    
+    static Logger log = Logger.getGlobal();
 
     public PlayerConnection(PlayerImpl player, Channel channel) {
         this.player = player;

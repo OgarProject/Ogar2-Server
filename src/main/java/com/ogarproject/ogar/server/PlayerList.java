@@ -22,12 +22,16 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
+
 import com.ogarproject.ogar.api.entity.Cell;
 
 public class PlayerList {
 
     private final OgarServer server;
     private final Set<PlayerImpl> players = new HashSet<>();
+    
+    static Logger log = Logger.getGlobal();
 
     public PlayerList(OgarServer server) {
         this.server = server;
@@ -38,10 +42,12 @@ public class PlayerList {
     }
 
     public void addPlayer(PlayerImpl player) {
+        log.info(player.getAddress().toString().split(":")[0]+" ("+player.getClientID()+") has conected to the server!");
         players.add(player);
     }
 
     public void removePlayer(PlayerImpl player) {
+        log.info(player.getAddress().toString().split(":")[0]+" ("+player.getClientID()+") has disconnected from the server!");
         players.remove(player);
         if (player != null) {
             for (Cell cell : player.getCells()) {

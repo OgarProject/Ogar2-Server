@@ -29,6 +29,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
+
 import com.ogarproject.ogar.api.entity.Cell;
 
 public class PlayerImpl implements Player {
@@ -38,10 +40,12 @@ public class PlayerImpl implements Player {
     private final PlayerTracker tracker;
     private String name;
     private boolean ompCapable;
+    static Logger log = Logger.getGlobal();
 
     public PlayerImpl(Channel channel) {
         this.playerConnection = new PlayerConnection(this, channel);
         this.tracker = new PlayerTracker(this);
+        log.info(getAddress().toString().split(":")[0]+" ("+getClientID()+") has conected to the server!");
     }
 
     @Override
@@ -110,6 +114,10 @@ public class PlayerImpl implements Player {
         int hash = 7;
         hash = 67 * hash + Objects.hashCode(this.playerConnection);
         return hash;
+    }
+    
+    public String getClientID(){
+        return getAddress().toString().split(":")[1];
     }
 
     @Override
