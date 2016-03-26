@@ -43,7 +43,7 @@ public class ServerGUI {
     public static void spawn(OgarServer server) {
         JFrame frame = new JFrame();
         frame.setLayout(new GridBagLayout());
-        frame.setTitle("Ogar 2");
+        frame.setTitle("Ogar 2 by OgarioProject");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JTextArea console = new JTextArea(40, 120);
