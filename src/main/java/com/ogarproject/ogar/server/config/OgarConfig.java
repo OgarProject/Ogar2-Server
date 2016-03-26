@@ -35,6 +35,7 @@ public class OgarConfig {
         public View view = new View();
         public Border border = new Border();
         public Food food = new Food();
+        public Virus virus = new Virus();
 
         public static class View {
 
@@ -56,7 +57,15 @@ public class OgarConfig {
             public int spawnPerInterval = 10; // How many food to spawn per interval
             public int startAmount = 100; // The amount of food to start the world with
             public int maxAmount = 500; // The maximum amount of food in the world at once
+            public int foodSize = 1; // The size of food spawned on the map
+            
         }
+        
+        public static class Virus {
+            public int virusSize = 150; // The size of a virus spawned on the map
+            public int startAmount = 50; // The amount of viruses to start the world with
+        }
+        
     }
 
     public static class Player {

@@ -56,6 +56,11 @@ public class WorldImpl implements World {
         for (int i = 0; i < server.getConfig().world.food.startAmount; i++) {
             spawnEntity(EntityType.FOOD);
         }
+        
+        for (int i = 0; i < server.getConfig().world.virus.startAmount; i++) {
+            spawnEntity(EntityType.VIRUS);
+        }
+        
     }
 
     @Override

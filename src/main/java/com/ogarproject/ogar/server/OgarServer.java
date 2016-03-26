@@ -283,7 +283,7 @@ public class OgarServer implements Server {
 
     private static class LogFormatter extends Formatter {
 
-        private static final DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss.SSS");
+        private static final DateFormat df = new SimpleDateFormat("HH:mm:ss");
 
         @Override
         public String format(LogRecord record) {
