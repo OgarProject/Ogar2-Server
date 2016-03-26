@@ -167,7 +167,7 @@ public class OgarServer implements Server {
         Ogar.setServer(this);
         pluginManager = new PluginManager(this);
         setupLogging();
-        log.info("OgarioProject by SkorrloreGaming-Productions is now starting.");
+        log.info("Ogar 2 by OgarioProject is now starting.");
         if (debugMode) {
             log.info("Debug mode is enabled; additional information will be logged.");
         }
