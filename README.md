@@ -1,6 +1,7 @@
 Thank you for being interested in the OgarioProject also known as Lar.io.
 
 Downloads: https://github.com/OgarioProject/Ogar2-Server/releases
+(**NOTE:** This are experimental builds! We cannot gurrantee that it will work at all!)
 
 # Features:
 * Eating/Growing
