@@ -16,6 +16,9 @@
  */
 package com.ogarproject.ogar.server.entity.impl;
 
+import java.awt.Color;
+import java.util.Random;
+
 import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.api.entity.Food;
 import com.ogarproject.ogar.server.OgarServer;
@@ -28,6 +31,14 @@ public class FoodImpl extends EntityImpl implements Food {
     public FoodImpl(WorldImpl world, Position position) {
         super(EntityType.FOOD, world, position);
         this.mass = OgarServer.getInstance().getConfig().world.food.foodSize;
+        Random random = new Random();
+        int ranInt = random.nextInt(6);
+        if (ranInt == 0) this.color = Color.RED;
+        if (ranInt == 1) this.color = Color.MAGENTA;
+        if (ranInt == 2) this.color = Color.ORANGE;
+        if (ranInt == 3) this.color = Color.YELLOW;
+        if (ranInt == 4) this.color = Color.GREEN;
+        if (ranInt == 5) this.color = Color.BLUE;
     }
 
     @Override

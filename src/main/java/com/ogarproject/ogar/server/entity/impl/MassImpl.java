@@ -16,6 +16,8 @@
  */
 package com.ogarproject.ogar.server.entity.impl;
 
+import java.awt.Color;
+
 import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.api.entity.Mass;
 import com.ogarproject.ogar.server.OgarServer;
@@ -28,6 +30,7 @@ public class MassImpl extends EntityImpl implements Mass{
     public MassImpl(WorldImpl world, Position position) {
         super(EntityType.MASS, world, position);
         this.mass = OgarServer.getInstance().getConfig().world.mass.ejectedMassSize;
+        this.color = Color.RED;
     }
 
     @Override

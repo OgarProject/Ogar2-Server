@@ -144,9 +144,9 @@ public class PlayerConnection {
             if (player.getCells().size() >= OgarServer.getInstance().getConfig().player.maxCells) return;
             Cell newCell = cell;
             newCell.setMass(cell.getMass()/2);
-            cell.setMass(cell.getMass()/2);
             player.addCell(newCell);
             OgarServer.getInstance().getWorld().spawnEntity(EntityType.CELL, newCell.getPosition(), player);
+            cell.setMass(cell.getMass()/2);
         }
     }
 

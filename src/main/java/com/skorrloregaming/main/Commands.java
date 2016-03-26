@@ -51,12 +51,12 @@ public class Commands {
         switch (s.toLowerCase().split(" ")[0]) {
             case "help":
                 Logger.getGlobal().info("Command listing for Ogar 2.0:");
-                Logger.getGlobal().info("\thelp\t\tShows this listing.");
-                Logger.getGlobal().info("\tstop\t\tShuts down the server.");
-                Logger.getGlobal().info("Command listing for Modified Ogar 2.0:");
-                Logger.getGlobal().info("\tlist\t\tList all current players on the server, including their ClientIDs.");
-                Logger.getGlobal().info("\tnick <ClientID> <Nickname>\t\tSet someones name to whatever you specify.");
-                Logger.getGlobal().info("\tmass <ClientID> <Mass>\t\tSet someones mass to whatever you specify.");
+                Logger.getGlobal().info("\thelp\t\t");
+                Logger.getGlobal().info("\tstop\t\t");
+                Logger.getGlobal().info("Command listing for OgarioProject:");
+                Logger.getGlobal().info("\tlist\t\t");
+                Logger.getGlobal().info("\tnick <ClientID> <Nickname>\t\t");
+                Logger.getGlobal().info("\tmass <ClientID> <Mass>\t\t");
                 break;
             case "stop":
                 OgarServer.getInstance().shutdown();
