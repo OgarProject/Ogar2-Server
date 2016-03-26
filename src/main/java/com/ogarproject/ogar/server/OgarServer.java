@@ -305,4 +305,8 @@ public class OgarServer implements Server {
     public int getPort() {
     	return configuration.server.port;
     }
+    
+    public String getServerName() {
+    	return configuration.server.name;
+    }
 }
