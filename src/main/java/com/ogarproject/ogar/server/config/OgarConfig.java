@@ -27,6 +27,7 @@ public class OgarConfig {
         public int port = 443;
         public int maxConnections = 100;
         public String ip = "localhost";
+        public String name = "Unknown Server";
         
     }
 

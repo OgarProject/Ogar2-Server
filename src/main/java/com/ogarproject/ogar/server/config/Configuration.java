@@ -27,6 +27,7 @@ public class Configuration {
             conf.world.virus.startAmount = Integer.parseInt(properties.getProperty("virusStartAmount"));
             conf.world.virus.virusSize = Integer.parseInt(properties.getProperty("virusSize"));
             conf.world.food.startAmount = Integer.parseInt(properties.getProperty("foodStartAmount"));
+            conf.server.name = properties.getProperty("name");
             return conf;
         }catch (Exception ex){
             log.info("An internal error has occured whilist reading configuration file!");
