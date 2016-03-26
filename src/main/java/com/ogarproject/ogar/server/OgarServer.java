@@ -154,8 +154,8 @@ public class OgarServer implements Server {
             log.severe("An internal error has occured whilist generating server.properties.");
             shutdown();
         }
-        writer.println("ip=localhost");
         writer.println("name=Unknown Server");
+        writer.println("ip=localhost");
         writer.println("port=443");
         writer.println("maxPlayers=20");
         writer.println("maxCells=20");
