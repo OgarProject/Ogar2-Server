@@ -8,8 +8,8 @@ public class Configuration {
 
     static Logger log = Logger.getGlobal();
     
-    public static OgarConfig load(String file){
-        try(FileReader reader = new FileReader(file)){
+    public static OgarConfig load(String file) {
+        try(FileReader reader = new FileReader(file)) {
             Properties properties = new Properties();
             properties.load(reader);
             OgarConfig conf = new OgarConfig();
@@ -29,7 +29,7 @@ public class Configuration {
             conf.world.food.startAmount = Integer.parseInt(properties.getProperty("foodStartAmount"));
             conf.server.name = properties.getProperty("name");
             return conf;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.info("An internal error has occured whilist reading configuration file!");
             log.info(ex.getMessage().toString());
             return new OgarConfig();
