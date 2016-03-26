@@ -1,0 +1,7 @@
+language: java
+jdk:
+  - oraclejdk8
+  
+addons:
+  artifacts: true
+  s3_region: "us-west-1" # defaults to "us-east-1"
