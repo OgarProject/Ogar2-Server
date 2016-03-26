@@ -36,7 +36,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
@@ -46,25 +46,25 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-buffer</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-common</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-transport</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.ogarproject</groupId>
             <artifactId>ogar-api</artifactId>
             <version>${project.version}</version>
         </dependency>
