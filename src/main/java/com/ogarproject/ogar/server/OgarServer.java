@@ -34,7 +34,10 @@ import com.ogarproject.ogar.server.tick.Tickable;
 import com.ogarproject.ogar.server.tick.TickableSupplier;
 import com.ogarproject.ogar.server.world.PlayerImpl;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -144,8 +147,31 @@ public class OgarServer implements Server {
     }
 
     public void saveConfig() {
-        log.info("The default configuration file could not be found!");
-        shutdown();
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("server.properties", "UTF-8");
+        } catch (Exception ex) {
+            log.severe("An internal error has occured whilist generating server.properties.");
+            shutdown();
+        }
+        writer.println("ip=localhost");
+        writer.println("name=Unknown Server");
+        writer.println("port=443");
+        writer.println("maxPlayers=20");
+        writer.println("maxCells=20");
+        writer.println("maxMass=85500");
+        writer.println("minMassSplit=36");
+        writer.println("minMassEject=24");
+        writer.println("ejectedMassSize=16");
+        writer.println("foodSize=1");
+        writer.println("foodStartAmount=100");
+        writer.println("virusStartAmount=10");
+        writer.println("virusSize=50");
+        writer.println("startMass=35");
+        writer.println("recombineTime=5");
+        writer.println("borderSize=6000");
+        writer.close();
+        loadConfig();
     }
 
     public OgarConfig getConfig() {
@@ -183,8 +209,9 @@ public class OgarServer implements Server {
         }
         if (!new File(configurationFile).isFile()) {
             saveConfig();
+        }else{
+            loadConfig();
         }
-        loadConfig();
         world = new WorldImpl(this);
         log.info("Loading plugins.");
         try {

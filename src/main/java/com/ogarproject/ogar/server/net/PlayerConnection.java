@@ -140,6 +140,8 @@ public class PlayerConnection {
     public void handle(PacketInSplit packet) {
         checkConnected();
         for (Cell cell : player.getCells()){
+            if (!(cell.getMass() > OgarServer.getInstance().getConfig().player.minMassSplit)) return;
+            if (player.getCells().size() >= OgarServer.getInstance().getConfig().player.maxCells) return;
             Cell newCell = cell;
             newCell.setMass(cell.getMass()/2);
             cell.setMass(cell.getMass()/2);
@@ -158,6 +160,11 @@ public class PlayerConnection {
 
     public void handle(PacketInEjectMass packet) {
         checkConnected();
+        for (Cell cell : player.getCells()){
+            if (!(cell.getMass() > OgarServer.getInstance().getConfig().player.minMassEject)) return;
+            cell.setMass(cell.getMass() - OgarServer.getInstance().getConfig().player.minMassEject);
+            OgarServer.getInstance().getWorld().spawnEntity(EntityType.MASS, cell.getPosition(), null);
+        }
     }
 
     public void handle(PacketInToken packet) {

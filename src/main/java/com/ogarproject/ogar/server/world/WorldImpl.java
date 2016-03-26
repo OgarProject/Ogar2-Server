@@ -33,10 +33,13 @@ import com.ogarproject.ogar.server.entity.impl.VirusImpl;
 import com.ogarproject.ogar.server.tick.Tickable;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import jline.internal.Log;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 public class WorldImpl implements World {
 
@@ -191,12 +194,16 @@ public class WorldImpl implements World {
     }
 
     public void tick(Consumer<Tickable> serverTick) {
-        if (server.getTick() % server.getConfig().world.food.spawnInterval == 0) {
-            spawnFood();
-        }
+        try{
+            if (server.getTick() % server.getConfig().world.food.spawnInterval == 0) {
+                spawnFood();
+            }
 
-        for (EntityImpl entity : entities.valueCollection()) {
-            serverTick.accept(entity);
+            for (EntityImpl entity : entities.valueCollection()) {
+                serverTick.accept(entity);
+            }
+        } catch (Exception ex){
+            Logger.getGlobal().warning("An internal error has occured while rendering, continuing to suppress...");
         }
     }
 

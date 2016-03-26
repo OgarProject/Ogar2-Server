@@ -19,6 +19,7 @@ package com.ogarproject.ogar.server.world;
 import com.google.common.collect.ImmutableSet;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Player;
+import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.net.PlayerConnection;
 import com.ogarproject.ogar.server.net.packet.outbound.PacketOutAddNode;
 import com.ogarproject.ogar.server.net.packet.universal.PacketOMPMessage;
@@ -46,6 +47,9 @@ public class PlayerImpl implements Player {
         this.playerConnection = new PlayerConnection(this, channel);
         this.tracker = new PlayerTracker(this);
         log.info(getAddress().toString().split(":")[0]+" ("+getClientID()+") has conected to the server!");
+        for (Cell cell : getCells()){
+            cell.setMass(OgarServer.getInstance().getConfig().player.startMass);
+        }
     }
 
     @Override

@@ -21,12 +21,15 @@ public class Configuration {
             conf.player.maxCells = Integer.parseInt(properties.getProperty("maxCells"));
             conf.player.maxMass = Integer.parseInt(properties.getProperty("maxMass"));
             conf.player.startMass = Integer.parseInt(properties.getProperty("startMass"));
-            conf.player.recombineTime = Integer.parseInt(properties.getProperty("recombineTime"));
+            conf.player.recombineTime = 30 * Integer.parseInt(properties.getProperty("recombineTime"));
             conf.server.maxConnections = Integer.parseInt(properties.getProperty("maxPlayers"));
             conf.world.food.foodSize = Integer.parseInt(properties.getProperty("foodSize"));
             conf.world.virus.startAmount = Integer.parseInt(properties.getProperty("virusStartAmount"));
             conf.world.virus.virusSize = Integer.parseInt(properties.getProperty("virusSize"));
             conf.world.food.startAmount = Integer.parseInt(properties.getProperty("foodStartAmount"));
+            conf.player.minMassSplit = Integer.parseInt(properties.getProperty("minMassSplit"));
+            conf.player.minMassEject = Integer.parseInt(properties.getProperty("minMassEject"));
+            conf.world.mass.ejectedMassSize = Integer.parseInt(properties.getProperty("ejectedMassSize"));
             conf.server.name = properties.getProperty("name");
             return conf;
         } catch (Exception ex) {
