@@ -301,4 +301,8 @@ public class OgarServer implements Server {
     public String getIp() {
         return configuration.server.ip;
     }
+    
+    public int getPort() {
+    	return configuration.server.port;
+    }
 }
