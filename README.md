@@ -10,12 +10,12 @@ Downloads: http://ci.thundergemios10.com/job/Ogar2-Server/
 * Eating/Growing
 * PvP
 * Logging in with Google.
+* Splitting (Alpha)
 
 # Issues:
 * No multi-colored food.
 * No scoreboard.
 * No bot system.
-* No splitting.
 * No ejecting.
 * Entities sometimes not deleting properly from map.
 
