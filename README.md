@@ -1,3 +1,5 @@
+# Ogar2-Server [![Travis-CI](https://travis-ci.org/OgarioProject/Ogar2-Server.svg)](https://travis-ci.org/OgarioProject/Ogar2-Server)
+
 Thank you for being interested in the OgarioProject also known as Lar.io.
 
 Downloads: http://ci.thundergemios10.com/job/Ogar2-Server/
