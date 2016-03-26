@@ -81,7 +81,7 @@ public class WorldImpl implements World {
         return (CellImpl) spawnEntity(EntityType.CELL, position, player);
     }
 
-    private EntityImpl spawnEntity(EntityType type, Position position, CellOwner owner) {
+    public EntityImpl spawnEntity(EntityType type, Position position, CellOwner owner) {
         if (type == null || position == null) {
             return null;
         }
