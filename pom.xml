@@ -75,6 +75,14 @@
         </dependency>
     </dependencies>
     
+    <repositories>
+        <repository>
+            <id>thundergemios10-repo</id>
+            <name>OgarioProject repo</name>
+            <url>http://repo.thundergemios10.com/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+    
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
