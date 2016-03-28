@@ -16,24 +16,37 @@
  */
 package com.ogarproject.ogar.server.net.packet.outbound;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import io.netty.buffer.ByteBuf;
+import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.net.packet.Packet;
 import com.ogarproject.ogar.server.net.throwable.WrongDirectionException;
-import io.netty.buffer.ByteBuf;
+import com.ogarproject.ogar.server.world.PlayerImpl;
 
 public class PacketOutUpdateLeaderboardFFA extends Packet {
 
-    private final Entry[] entries;
+        private List<PlayerImpl> allParticates = new ArrayList<PlayerImpl>();
+    private final OgarServer server;
 
-    public PacketOutUpdateLeaderboardFFA(Entry[] entries) {
-        this.entries = entries;
+    public PacketOutUpdateLeaderboardFFA(OgarServer server) {
+        this.server = server;
     }
 
     @Override
     public void writeData(ByteBuf buf) {
-        buf.writeInt(entries.length);
-        for (Entry entry : entries) {
-            buf.writeInt(entry.getEntityId());
-            writeUTF16(buf, entry.getName());
+        prepare();
+        int max = 10;// TODO config
+        if(allParticates.size() >= max)
+                buf.writeInt(max);
+        else
+                buf.writeInt(allParticates.size());
+        for(PlayerImpl player : allParticates)
+        {
+                 buf.writeInt(player.getCellIdAt(0));
+             writeUTF16(buf, player.getName());
         }
     }
 
@@ -42,23 +55,23 @@ public class PacketOutUpdateLeaderboardFFA extends Packet {
         throw new WrongDirectionException();
     }
 
-    public static class Entry {
-
-        private final int entityId;
-        private final String name;
-
-        public Entry(int entityId, String name) {
-            this.entityId = entityId;
-            this.name = name;
+    private void prepare()
+        {
+                for(PlayerImpl player : server.getPlayerList().getAllPlayers())
+                {
+                        if(player.getCells().isEmpty())
+                                continue;
+                        allParticates.add(player);
+                }
+                allParticates.sort(PLAYER_COMPARATOR);
         }
 
-        public int getEntityId() {
-            return entityId;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-    }
+        public static final Comparator<PlayerImpl> PLAYER_COMPARATOR = (o1, o2) -> {
+                if(o1.getTotalMass() > o2.getTotalMass())
+                        return -1;
+                if(o1.getTotalMass() < o2.getTotalMass())
+                        return 1;
+                return 0;
+        };
 }
+ 

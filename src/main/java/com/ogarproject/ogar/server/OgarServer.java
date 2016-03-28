@@ -29,6 +29,7 @@ import com.ogarproject.ogar.server.gui.ServerCLI;
 import com.ogarproject.ogar.server.gui.ServerGUI;
 import com.ogarproject.ogar.server.net.NetworkManager;
 import com.ogarproject.ogar.server.plugin.SimpleScheduler;
+import com.ogarproject.ogar.server.net.packet.outbound.PacketOutUpdateLeaderboardFFA;
 import com.ogarproject.ogar.server.tick.TickWorker;
 import com.ogarproject.ogar.server.tick.Tickable;
 import com.ogarproject.ogar.server.tick.TickableSupplier;
@@ -243,6 +244,8 @@ public class OgarServer implements Server {
                 for (PlayerImpl player : playerList.getAllPlayers()) {
                     tick(player.getTracker()::updateNodes);
                 }
+                for(PlayerImpl player : instance.getPlayerList().getAllPlayers())
+                    player.getConnection().sendPacket(new com.ogarproject.ogar.server.net.packet.outbound.PacketOutUpdateLeaderboardFFA(instance));
                 tickWorkers.forEach(TickWorker::waitForCompletion);
                 scheduler.serverTick(tick);
                 long tickDuration = System.currentTimeMillis() - startTime;
