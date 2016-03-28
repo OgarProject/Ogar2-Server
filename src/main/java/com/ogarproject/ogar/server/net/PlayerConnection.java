@@ -23,7 +23,6 @@ import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.api.event.player.PlayerConnectedEvent;
 import com.ogarproject.ogar.api.event.player.PlayerConnectingEvent;
 import com.ogarproject.ogar.api.event.player.PlayerNameChangeEvent;
-import com.ogarproject.ogar.api.world.Position;
 import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.entity.impl.CellImpl;
 import com.ogarproject.ogar.server.net.packet.inbound.PacketInToken;
