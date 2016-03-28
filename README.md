@@ -14,9 +14,9 @@ Thank you for being interested in the OgarioProject also known as Lar.io.
 * Splitting (Beta)
 * Ejecting (Beta)
 * Multi-Colored food
+* Leaderboard
 
 # Issues:
-* No scoreboard.
 * No bot system.
 * Entities sometimes not deleting properly from map.
 * No velocity of splitting & ejecting
