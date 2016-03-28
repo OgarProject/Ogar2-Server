@@ -32,6 +32,7 @@ import com.ogarproject.ogar.server.plugin.SimpleScheduler;
 import com.ogarproject.ogar.server.tick.TickWorker;
 import com.ogarproject.ogar.server.tick.Tickable;
 import com.ogarproject.ogar.server.tick.TickableSupplier;
+import com.ogarproject.ogar.server.util.Versioning;
 import com.ogarproject.ogar.server.world.PlayerImpl;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,7 +59,7 @@ public class OgarServer implements Server {
     private final PlayerList playerList = new PlayerList(this);
     private final String configurationFile = "server.properties";
     private final boolean debugMode = Boolean.getBoolean("debug");
-    private final Set<TickWorker> tickWorkers = new HashSet<>();
+    private final Set<TickWorker> tickWorkers = new HashSet<TickWorker>();
     private final Messenger messenger = new Messenger();
     private final SimpleScheduler scheduler = new SimpleScheduler(this);
     private int tickThreads = Integer.getInteger("tickThreads", 1);
@@ -68,6 +69,7 @@ public class OgarServer implements Server {
     private OgarConfig configuration;
     private long tick = 0L;
     private boolean running;
+    private final String ogarVersion = Versioning.getOgarVersion();
 
     public static void main(String[] args) throws Throwable {
         OgarServer.instance = new OgarServer();
@@ -78,12 +80,10 @@ public class OgarServer implements Server {
         return instance;
     }
 
-    @Override
     public Logger getLogger() {
         return log;
     }
 
-    @Override
     public PluginManager getPluginManager() {
         return pluginManager;
     }
@@ -92,17 +92,14 @@ public class OgarServer implements Server {
         return playerList;
     }
 
-    @Override
     public WorldImpl getWorld() {
         return world;
     }
 
-    @Override
     public Messenger getMessenger() {
         return messenger;
     }
     
-    @Override
     public Scheduler getScheduler() {
         return scheduler;
     }
@@ -335,5 +332,9 @@ public class OgarServer implements Server {
     
     public String getServerName() {
     	return configuration.server.name;
+    }
+    
+    public String getOgarVersion() {
+    	return ogarVersion;
     }
 }

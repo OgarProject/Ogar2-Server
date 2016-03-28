@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableSet;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Player;
 import com.ogarproject.ogar.server.OgarServer;
+import com.ogarproject.ogar.server.entity.impl.CellImpl;
 import com.ogarproject.ogar.server.net.PlayerConnection;
 import com.ogarproject.ogar.server.net.packet.outbound.PacketOutAddNode;
 import com.ogarproject.ogar.server.net.packet.universal.PacketOMPMessage;
@@ -30,6 +31,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 
 import com.ogarproject.ogar.api.entity.Cell;
@@ -42,6 +46,9 @@ public class PlayerImpl implements Player {
     private String name;
     private boolean ompCapable;
     static Logger log = Logger.getGlobal();
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock cellRead = lock.readLock();
+    private final Lock cellWrite = lock.writeLock();
 
     public PlayerImpl(Channel channel) {
         this.playerConnection = new PlayerConnection(this, channel);
@@ -156,6 +163,35 @@ public class PlayerImpl implements Player {
         PacketOMPMessage packet = new PacketOMPMessage(channel, data);
         playerConnection.sendPacket(packet);
         return true;
+    }
+    
+    public int getCellIdAt(int index) {
+        int i = 0;
+        cellRead.lock();
+        try{
+                Iterator<Cell> it = cells.iterator();
+                while (it.hasNext()) {
+                        if(i == index)
+                        {
+                                i = it.next().getID();
+                        break;
+                        }
+                        i++;
+                    }
+                
+                        return i;
+        }
+                finally{
+                        cellRead.unlock();
+                }
+    }
+    
+    public double getTotalMass() {
+        double totalMass = 0.0D;
+        for (Cell cell : getCells()) {
+            totalMass += cell.getMass();
+        }
+        return totalMass;
     }
 
 }
