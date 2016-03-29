@@ -3,25 +3,23 @@
 Thank you for being interested in the OgarioProject also known as Lar.io.
 
 * Downloads: http://ci.thundergemios10.com/job/Ogar2-Server/
-* Alternative Downloads: http://skorrloregaming.zapto.org/ogario-project/
 
 (**NOTE:** This are experimental builds! We cannot gurrantee that it will work at all!)
 
-# Features:
-* Eating/Growing
-* PvP
+# Current features above original Ogar2:
 * Logging in with Google.
-* Splitting (Beta)
-* Ejecting (Beta)
-* Multi-Colored food
-* Leaderboard
+* Splitting (Beta).
+* Ejecting (Beta).
+* Multi-Colored food.
+* Leaderboard.
+* Suppressing rendering errors.
 
-# Issues:
-* No bot system.
+# Current issues:
 * Entities sometimes not deleting properly from map.
-* No velocity of splitting & ejecting
-* No poping and auto splitting of viruses
+* No splitting/ejecting in direction.
+* Cannot move viruses with mass.
+* Cannot be split from eating a virus.
 
 # Team Members:
-* SkorrloreGaming-Productions (Project Lead)
-* ThunderGemios10 (Developer)
+* SkorrloreGaming-Productions (Developer/Project Lead)
+* ThunderGemios10 (Developer/CEO)
