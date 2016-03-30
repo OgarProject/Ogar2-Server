@@ -7,6 +7,7 @@ Thank you for being interested in the OgarioProject also known as Lar.io.
 (**NOTE:** This are experimental builds! We cannot gurrantee that it will work at all!)
 
 # Current features above original Ogar2:
+* Logging in with Facebook.
 * Logging in with Google.
 * Splitting (Beta).
 * Ejecting (Beta).
