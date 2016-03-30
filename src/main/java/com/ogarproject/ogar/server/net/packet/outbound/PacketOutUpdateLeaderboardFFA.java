@@ -28,7 +28,7 @@ import com.ogarproject.ogar.server.world.PlayerImpl;
 
 public class PacketOutUpdateLeaderboardFFA extends Packet {
 
-        private List<PlayerImpl> allParticates = new ArrayList<PlayerImpl>();
+    private List<PlayerImpl> allParticates = new ArrayList<PlayerImpl>();
     private final OgarServer server;
 
     public PacketOutUpdateLeaderboardFFA(OgarServer server) {

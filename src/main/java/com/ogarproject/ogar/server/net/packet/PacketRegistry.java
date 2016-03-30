@@ -32,10 +32,12 @@ public class PacketRegistry {
     static {
         // Clientbound packets
         CLIENTBOUND.registerPacket(16, PacketOutUpdateNodes.class);
+        CLIENTBOUND.registerPacket(17, PacketOutUpdatePositionAndSize.class);
         CLIENTBOUND.registerPacket(20, PacketOutClearNodes.class);
         CLIENTBOUND.registerPacket(21, PacketOutDrawLine.class);
         CLIENTBOUND.registerPacket(32, PacketOutAddNode.class);
         CLIENTBOUND.registerPacket(49, PacketOutUpdateLeaderboardFFA.class);
+        CLIENTBOUND.registerPacket(50, PacketOutUpdateLeaderboardTeams.class);
         CLIENTBOUND.registerPacket(64, PacketOutWorldBorder.class);
         CLIENTBOUND.registerPacket(212, PacketOMPMessage.class);
 
