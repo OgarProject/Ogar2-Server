@@ -39,6 +39,7 @@ import com.ogarproject.ogar.server.net.packet.Packet;
 import com.ogarproject.ogar.server.net.packet.inbound.PacketInFacebookLogin;
 import com.ogarproject.ogar.server.net.packet.inbound.PacketInGoogleLogin;
 import com.ogarproject.ogar.server.net.packet.outbound.PacketOutWorldBorder;
+import com.ogarproject.ogar.server.net.packet.universal.PacketChat;
 import com.ogarproject.ogar.server.net.packet.universal.PacketOMPMessage;
 import com.ogarproject.ogar.server.net.throwable.UnhandledPacketException;
 import com.ogarproject.ogar.server.world.PlayerImpl;
@@ -102,6 +103,8 @@ public class PlayerConnection {
             handle((PacketInResetConnection) packet);
         } else if (packet instanceof PacketOMPMessage) {
             handle((PacketOMPMessage) packet);
+        } else if (packet instanceof PacketChat) {
+            handle((PacketChat) packet);
         } else {
             throw new UnhandledPacketException("Unhandled packet: " + packet);
         }
@@ -209,6 +212,10 @@ public class PlayerConnection {
         if (!player.isPluginMessageCapable() && "OMP|Capable".equals(packet.channel)) {
             player.setOMPCapable(true);
         }
+    }
+    
+    public void handle(PacketChat packet) {
+        checkConnected();
     }
 
     public boolean isIndividualMovementEnabled() {

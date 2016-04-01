@@ -24,6 +24,8 @@ import com.ogarproject.ogar.server.net.PlayerConnection;
 import com.ogarproject.ogar.server.net.packet.outbound.PacketOutAddNode;
 import com.ogarproject.ogar.server.net.packet.universal.PacketOMPMessage;
 import io.netty.channel.Channel;
+
+import java.awt.Color;
 import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.HashSet;
@@ -47,6 +49,7 @@ public class PlayerImpl implements Player {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock cellRead = lock.readLock();
     static Logger log = Logger.getGlobal();
+    private Color cellsColor;
 
     public PlayerImpl(Channel channel) {
         this.playerConnection = new PlayerConnection(this, channel);
@@ -189,5 +192,16 @@ public class PlayerImpl implements Player {
         playerConnection.sendPacket(packet);
         return true;
     }
+    
+    public void setCellsColor(Color color)
+    {
+    	cellsColor = color;
+    }
+
+    public Color getCellsColor()
+    {
+    	return cellsColor;
+    }
+
 
 }
