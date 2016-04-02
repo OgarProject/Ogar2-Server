@@ -204,7 +204,6 @@ public class WorldImpl implements World {
             }
         } catch (Exception ex){
             Logger.getGlobal().warning("An internal error has occured while rendering, continuing to suppress...");
-            ex.printStackTrace();
         }
     }
 

@@ -223,13 +223,11 @@ public class OgarServer implements Server {
         }
         log.info("Enabling plugins.");
         pluginManager.enablePlugins();
-        log.info("Start listening on port " + getConfig().server.port);
         networkManager = new NetworkManager(this);
         try {
             networkManager.start();
         } catch (IOException | InterruptedException ex) {
             log.info("Failed to start server! "+ex.getMessage());
-            ex.printStackTrace();
             if (ServerGUI.isSpawned()) {
             	System.exit(1);
             } else {

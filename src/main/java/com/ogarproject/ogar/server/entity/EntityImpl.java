@@ -18,7 +18,6 @@ package com.ogarproject.ogar.server.entity;
 
 import com.ogarproject.ogar.api.entity.Entity;
 import com.ogarproject.ogar.api.entity.EntityType;
-import com.ogarproject.ogar.server.physic.PhysicsSupport;
 import com.ogarproject.ogar.server.tick.Tickable;
 import com.ogarproject.ogar.api.world.Position;
 import com.ogarproject.ogar.server.world.WorldImpl;
@@ -26,7 +25,7 @@ import java.awt.Color;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class EntityImpl extends PhysicsSupport implements Entity, Tickable {
+public abstract class EntityImpl implements Entity, Tickable {
 
     private static final AtomicInteger nextEntityId = new AtomicInteger(1);
     protected final int id;
@@ -43,7 +42,6 @@ public abstract class EntityImpl extends PhysicsSupport implements Entity, Ticka
         this.type = type;
         this.world = world;
         this.position = position;
-        InitPhysics(this);
     }
 
     @Override
