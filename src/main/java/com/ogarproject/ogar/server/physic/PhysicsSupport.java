@@ -7,10 +7,17 @@ import com.ogarproject.ogar.api.entity.Entity;
  */
 public class PhysicsSupport {
     public PhysicsRecord record;
+    boolean inited = false;
+
+    public boolean isInitialized() {
+        return inited;
+    }
 
     public void InitPhysics(Entity entity) {
         record = new PhysicsRecord(entity);
+        inited = true;
     }
+
 
     public PhysicsRecord getPhysics(){
         return record;

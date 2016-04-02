@@ -200,6 +200,8 @@ public class WorldImpl implements World {
             }
 
             for (EntityImpl entity : entities.valueCollection()) {
+                if(!entity.isInitialized()) entity.InitPhysics(entity);
+                entity.UpdateMovement();
                 serverTick.accept(entity);
             }
         } catch (Exception ex){

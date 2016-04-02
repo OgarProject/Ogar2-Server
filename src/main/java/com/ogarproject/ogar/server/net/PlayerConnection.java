@@ -142,7 +142,6 @@ public class PlayerConnection {
             cell.setMass(cell.getMass() / 2);
             OgarServer.getInstance().getWorld().spawnEntity(EntityType.CELL, newCell.getPosition(), player);
             player.addCell(newCell);
-            ((EntityImpl) newCell).getPhysics().setVector(cell.get);
         }
     }
 

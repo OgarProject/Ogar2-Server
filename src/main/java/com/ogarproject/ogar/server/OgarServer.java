@@ -247,7 +247,7 @@ public class OgarServer implements Server {
                     tick(player.getTracker()::updateNodes);
                 }
                 for(PlayerImpl player : instance.getPlayerList().getAllPlayers())
-                    player.getConnection().sendPacket(new com.ogarproject.ogar.server.net.packet.outbound.PacketOutUpdateLeaderboardFFA(instance));
+                    player.getConnection().sendPacket(new PacketOutUpdateLeaderboardFFA(instance));
                 tickWorkers.forEach(TickWorker::waitForCompletion);
                 scheduler.serverTick(tick);
                 long tickDuration = System.currentTimeMillis() - startTime;
