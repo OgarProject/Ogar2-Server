@@ -49,11 +49,11 @@ public class NetworkManager {
         workerGroup = new NioEventLoopGroup();
 
         ServerBootstrap b = new ServerBootstrap();
-        b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).handler(new LoggingHandler(LogLevel.INFO)).childHandler(new ClientInitializer(server));
+        b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).handler(new LoggingHandler()).childHandler(new ClientInitializer(server));
 
         channel = b.bind(server.getConfig().server.port).sync().channel();
 
-        OgarServer.log.info("Server started on port " + server.getConfig().server.port + ".");
+        OgarServer.log.info("Server successfully started on port " + server.getConfig().server.port + ".");
     }
 
     public boolean shutdown() {

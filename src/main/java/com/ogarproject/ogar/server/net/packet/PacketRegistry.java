@@ -32,10 +32,12 @@ public class PacketRegistry {
     static {
         // Clientbound packets
         CLIENTBOUND.registerPacket(16, PacketOutUpdateNodes.class);
+        CLIENTBOUND.registerPacket(17, PacketOutUpdatePositionAndSize.class);
         CLIENTBOUND.registerPacket(20, PacketOutClearNodes.class);
         CLIENTBOUND.registerPacket(21, PacketOutDrawLine.class);
         CLIENTBOUND.registerPacket(32, PacketOutAddNode.class);
         CLIENTBOUND.registerPacket(49, PacketOutUpdateLeaderboardFFA.class);
+        CLIENTBOUND.registerPacket(50, PacketOutUpdateLeaderboardTeams.class);
         CLIENTBOUND.registerPacket(64, PacketOutWorldBorder.class);
         CLIENTBOUND.registerPacket(212, PacketOMPMessage.class);
 
@@ -49,6 +51,8 @@ public class PacketRegistry {
         SERVERBOUND.registerPacket(21, PacketInEjectMass.class);
         SERVERBOUND.registerPacket(80, PacketInToken.class);
         SERVERBOUND.registerPacket(81, PacketInFacebookLogin.class);
+        SERVERBOUND.registerPacket(82, PacketInGoogleLogin.class);
+        CLIENTBOUND.registerPacket(99, PacketChat.class);
         SERVERBOUND.registerPacket(212, PacketOMPMessage.class);
         SERVERBOUND.registerPacket(254, PacketInAuthenticate.class);
         SERVERBOUND.registerPacket(255, PacketInResetConnection.class);

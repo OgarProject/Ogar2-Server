@@ -18,24 +18,22 @@ package com.ogarproject.ogar.server.net.packet.inbound;
 
 import com.ogarproject.ogar.server.net.packet.Packet;
 import com.ogarproject.ogar.server.net.throwable.WrongDirectionException;
+
 import io.netty.buffer.ByteBuf;
 
-public class PacketInSetNick extends Packet {
+public class PacketInGoogleLogin extends Packet {
+    public String identifier;
 
-    public String nickname;
-
-    @Override
-    public void writeData(ByteBuf buf) {
+	@Override
+	public void writeData(ByteBuf buf) {
         throw new WrongDirectionException();
-    }
+		
+	}
 
-    @Override
-    public void readData(ByteBuf buf) {
-    	String preset = readUTF16(buf);
-    	if (preset.equalsIgnoreCase("")){
-    		preset = "An unnamed cell";
-    	}
-        nickname = preset;
-    }
+	@Override
+	public void readData(ByteBuf buf) {
+        identifier = readUTF8(buf);
+		
+	}
 
 }

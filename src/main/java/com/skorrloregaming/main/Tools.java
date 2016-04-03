@@ -14,28 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Ogar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ogarproject.ogar.server.net.packet.inbound;
+package com.skorrloregaming.main;
 
-import com.ogarproject.ogar.server.net.packet.Packet;
-import com.ogarproject.ogar.server.net.throwable.WrongDirectionException;
-import io.netty.buffer.ByteBuf;
+import java.util.logging.Logger;
 
-public class PacketInSetNick extends Packet {
+import com.ogarproject.ogar.server.OgarServer;
+import com.ogarproject.ogar.server.world.PlayerImpl;
 
-    public String nickname;
-
-    @Override
-    public void writeData(ByteBuf buf) {
-        throw new WrongDirectionException();
-    }
-
-    @Override
-    public void readData(ByteBuf buf) {
-    	String preset = readUTF16(buf);
-    	if (preset.equalsIgnoreCase("")){
-    		preset = "An unnamed cell";
-    	}
-        nickname = preset;
-    }
-
+public class Tools {
+	public static PlayerImpl ConvertClientToPlayer(String clientID){
+		for (PlayerImpl player : OgarServer.getInstance().getPlayerList().getAllPlayers()){
+			if (player.getConnection().getRemoteAddress().toString().split(":")[1].equalsIgnoreCase(clientID)){
+				return player;
+			}
+		}
+		Logger.getGlobal().info("A severe internal error has occured trying to fetch client player!");
+		return null;
+	}
 }

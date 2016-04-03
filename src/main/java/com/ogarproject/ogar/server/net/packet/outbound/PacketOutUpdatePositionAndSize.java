@@ -14,28 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Ogar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ogarproject.ogar.server.net.packet.inbound;
+package com.ogarproject.ogar.server.net.packet.outbound;
 
 import com.ogarproject.ogar.server.net.packet.Packet;
 import com.ogarproject.ogar.server.net.throwable.WrongDirectionException;
+
 import io.netty.buffer.ByteBuf;
 
-public class PacketInSetNick extends Packet {
+public class PacketOutUpdatePositionAndSize extends Packet {
 
-    public String nickname;
+	@Override
+	public void writeData(ByteBuf buf) {
+	}
 
-    @Override
-    public void writeData(ByteBuf buf) {
+	@Override
+	public void readData(ByteBuf buf) {
         throw new WrongDirectionException();
-    }
-
-    @Override
-    public void readData(ByteBuf buf) {
-    	String preset = readUTF16(buf);
-    	if (preset.equalsIgnoreCase("")){
-    		preset = "An unnamed cell";
-    	}
-        nickname = preset;
-    }
+		
+	}
 
 }

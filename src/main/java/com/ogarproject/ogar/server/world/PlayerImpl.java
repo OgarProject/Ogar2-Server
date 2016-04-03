@@ -19,17 +19,24 @@ package com.ogarproject.ogar.server.world;
 import com.google.common.collect.ImmutableSet;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Player;
-import com.ogarproject.ogar.server.net.PlayerConnection;
 import com.ogarproject.ogar.server.entity.impl.CellImpl;
+import com.ogarproject.ogar.server.net.PlayerConnection;
 import com.ogarproject.ogar.server.net.packet.outbound.PacketOutAddNode;
 import com.ogarproject.ogar.server.net.packet.universal.PacketOMPMessage;
 import io.netty.channel.Channel;
+
+import java.awt.Color;
 import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Logger;
+
 import com.ogarproject.ogar.api.entity.Cell;
 
 public class PlayerImpl implements Player {
@@ -39,10 +46,15 @@ public class PlayerImpl implements Player {
     private final PlayerTracker tracker;
     private String name;
     private boolean ompCapable;
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock cellRead = lock.readLock();
+    static Logger log = Logger.getGlobal();
+    private Color cellsColor;
 
     public PlayerImpl(Channel channel) {
         this.playerConnection = new PlayerConnection(this, channel);
         this.tracker = new PlayerTracker(this);
+        log.info(getAddress().toString().split(":")[0]+" ("+getClientID()+") has conected to the server!");
     }
 
     @Override
@@ -76,6 +88,36 @@ public class PlayerImpl implements Player {
                 it.remove();
             }
         }
+    }
+    
+    public int getCellIdAt(int index) {
+        int i = 0;
+        cellRead.lock();
+        try{
+                Iterator<Cell> it = cells.iterator();
+                while (it.hasNext()) {
+                        if(i == index)
+                        {
+                                i = it.next().getID();
+                        break;
+                        }
+                        i++;
+                    }
+                
+                        return i;
+        }
+                finally{
+                        cellRead.unlock();
+                }
+    }
+    
+    public double getTotalMass()
+    {
+        double totalMass = 0.0D;
+        for (Cell cell : getCells()) {
+            totalMass += cell.getMass();
+        }
+        return totalMass;
     }
 
     @Override
@@ -112,6 +154,10 @@ public class PlayerImpl implements Player {
         hash = 67 * hash + Objects.hashCode(this.playerConnection);
         return hash;
     }
+    
+    public String getClientID(){
+        return getAddress().toString().split(":")[1];
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -146,5 +192,16 @@ public class PlayerImpl implements Player {
         playerConnection.sendPacket(packet);
         return true;
     }
+    
+    public void setCellsColor(Color color)
+    {
+    	cellsColor = color;
+    }
+
+    public Color getCellsColor()
+    {
+    	return cellsColor;
+    }
+
 
 }

@@ -17,28 +17,31 @@
 package com.ogarproject.ogar.server;
 
 import com.ogarproject.ogar.server.world.WorldImpl;
-import com.google.common.base.Throwables;
+import com.skorrloregaming.main.Commands;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.Server;
 import com.ogarproject.ogar.api.plugin.Messenger;
 import com.ogarproject.ogar.api.plugin.PluginManager;
 import com.ogarproject.ogar.api.plugin.Scheduler;
+import com.ogarproject.ogar.server.config.Configuration;
 import com.ogarproject.ogar.server.config.OgarConfig;
-import com.ogarproject.ogar.server.config.JsonConfiguration;
-import com.ogarproject.ogar.server.config.LegacyConfig;
 import com.ogarproject.ogar.server.gui.ServerCLI;
 import com.ogarproject.ogar.server.gui.ServerGUI;
 import com.ogarproject.ogar.server.net.NetworkManager;
 import com.ogarproject.ogar.server.plugin.SimpleScheduler;
+import com.ogarproject.ogar.server.net.packet.outbound.PacketOutUpdateLeaderboardFFA;
 import com.ogarproject.ogar.server.tick.TickWorker;
 import com.ogarproject.ogar.server.tick.Tickable;
 import com.ogarproject.ogar.server.tick.TickableSupplier;
+import com.ogarproject.ogar.server.util.Versioning;
 import com.ogarproject.ogar.server.world.PlayerImpl;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,9 +58,9 @@ public class OgarServer implements Server {
     private static OgarServer instance;
     public static final Logger log = Logger.getGlobal();
     private final PlayerList playerList = new PlayerList(this);
-    private final File configurationFile = new File("config.json");
+    private final String configurationFile = "server.properties";
     private final boolean debugMode = Boolean.getBoolean("debug");
-    private final Set<TickWorker> tickWorkers = new HashSet<>();
+    private final Set<TickWorker> tickWorkers = new HashSet<TickWorker>();
     private final Messenger messenger = new Messenger();
     private final SimpleScheduler scheduler = new SimpleScheduler(this);
     private int tickThreads = Integer.getInteger("tickThreads", 1);
@@ -67,6 +70,7 @@ public class OgarServer implements Server {
     private OgarConfig configuration;
     private long tick = 0L;
     private boolean running;
+    private final String ogarVersion = Versioning.getOgarVersion();
 
     public static void main(String[] args) throws Throwable {
         OgarServer.instance = new OgarServer();
@@ -77,12 +81,10 @@ public class OgarServer implements Server {
         return instance;
     }
 
-    @Override
     public Logger getLogger() {
         return log;
     }
 
-    @Override
     public PluginManager getPluginManager() {
         return pluginManager;
     }
@@ -91,41 +93,20 @@ public class OgarServer implements Server {
         return playerList;
     }
 
-    @Override
     public WorldImpl getWorld() {
         return world;
     }
 
-    @Override
     public Messenger getMessenger() {
         return messenger;
     }
     
-    @Override
     public Scheduler getScheduler() {
         return scheduler;
     }
 
     public boolean isDebugging() {
         return debugMode;
-    }
-
-    private void convertLegacyConfig() {
-        File file = new File("gameserver.ini");
-        if (file.isFile()) {
-            log.info("I see you have a legacy configuration file from Ogar version 1 (gameserver.ini). I'll go ahead and convert that for you.");
-            try {
-                LegacyConfig legacy = new LegacyConfig(file);
-                this.configuration = legacy.convert();
-                saveConfig();
-                file.renameTo(new File("gameserver.ini.converted"));
-                log.info("Successfully converted Ogar version 1 configuration!");
-                log.info("Your old configuration was renamed to \"gameserver.ini.converted\".");
-                log.info("Do not rename this back to \"gameserver.ini\", or your Ogar 2 configuration will be overwritten!");
-            } catch (IOException ex) {
-                log.log(Level.WARNING, "Legacy configuration conversion failed.", ex);
-            }
-        }
     }
 
     private void setupLogging() {
@@ -160,17 +141,35 @@ public class OgarServer implements Server {
     }
 
     public void loadConfig() {
-        this.configuration = JsonConfiguration.load(configurationFile, OgarConfig.class);
-        log.info("Loaded configuration from " + configurationFile + ".");
+        this.configuration = Configuration.load(configurationFile);
     }
 
     public void saveConfig() {
-        if (configuration == null) {
-            configuration = new OgarConfig();
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("server.properties", "UTF-8");
+        } catch (Exception ex) {
+            log.severe("An internal error has occured whilist generating server.properties.");
+            shutdown();
         }
-
-        configuration.save(configurationFile);
-        log.info("Saved configuration to " + configurationFile + ".");
+        writer.println("name=Unknown Server");
+        writer.println("ip=localhost");
+        writer.println("port=443");
+        writer.println("maxPlayers=20");
+        writer.println("maxCells=20");
+        writer.println("maxMass=85500");
+        writer.println("minMassSplit=36");
+        writer.println("minMassEject=24");
+        writer.println("ejectedMassSize=16");
+        writer.println("foodSize=1");
+        writer.println("foodStartAmount=100");
+        writer.println("virusStartAmount=10");
+        writer.println("virusSize=50");
+        writer.println("startMass=35");
+        writer.println("recombineTime=5");
+        writer.println("borderSize=6000");
+        writer.close();
+        loadConfig();
     }
 
     public OgarConfig getConfig() {
@@ -183,148 +182,97 @@ public class OgarServer implements Server {
 
     private void run() {
         if (ServerGUI.isHeadless()) {
-            // Set up jline for the terminal
             Thread thread = new Thread(new ServerCLI(this), "Console Command Handler");
             thread.setDaemon(true);
             thread.start();
         } else {
-            // Spawn a user-friendly GUI
             ServerGUI.spawn(this);
         }
-
-        Calendar expiryDate = Calendar.getInstance();
-        expiryDate.clear();
-        expiryDate.set(2016, 2, 29);
-        if (Calendar.getInstance().after(expiryDate)) {
-            log.warning("It looks like you may be using an outdated version of Ogar 2.");
-            log.warning("Please check http://www.ogarproject.com for a new version.");
-            log.warning("The server will start in 10 seconds.");
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException ex) {
-                //
-            }
-        }
-
         Ogar.setServer(this);
         pluginManager = new PluginManager(this);
-
         setupLogging();
-        log.info("Ogar Server starting.");
+        log.info("Ogar 2 by OgarioProject is now starting.");
         if (debugMode) {
             log.info("Debug mode is enabled; additional information will be logged.");
         }
-
         // Create the tick workers
         if (tickThreads < 1) {
             tickThreads = 1;
         }
-        log.info("Running server with " + tickThreads + " tick thread(s).");
         if (tickThreads > 1) {
             log.warning("Use of multiple tick threads is experimental and may be unstable!");
         }
-
         for (int i = 0; i < tickThreads; i++) {
             tickWorkers.add(new TickWorker());
         }
-
-        convertLegacyConfig();
-        if (!configurationFile.isFile()) {
+        if (!new File(configurationFile).isFile()) {
             saveConfig();
+        }else{
+            loadConfig();
         }
-        loadConfig();
-
         world = new WorldImpl(this);
-
         log.info("Loading plugins.");
         try {
             File pluginDirectory = new File("plugins");
             if (!pluginDirectory.exists()) {
                 pluginDirectory.mkdirs();
             }
-
             pluginManager.loadPlugins(pluginDirectory);
         } catch (Throwable t) {
             log.log(Level.SEVERE, "Failed to load plugins", t);
         }
-
         log.info("Enabling plugins.");
         pluginManager.enablePlugins();
-
+        log.info("Start listening on port " + getConfig().server.port);
         networkManager = new NetworkManager(this);
         try {
             networkManager.start();
         } catch (IOException | InterruptedException ex) {
-            log.log(Level.SEVERE, "Failed to start server!", ex);
+            log.info("Failed to start server! "+ex.getMessage());
+            ex.printStackTrace();
             if (ServerGUI.isSpawned()) {
-                // Don't instantly close the console
-                while (true) {
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException rekt) {
-                        System.exit(1);
-                    }
-                }
+            	System.exit(1);
             } else {
-                // Instantly close - non-GUI users will probably be able to see the logs
                 System.exit(1);
             }
         }
-
-        // Start the tick workers
         tickWorkers.forEach(TickWorker::start);
-
         running = true;
         while (running) {
             try {
-                // To make the tick loop adaptive, we measure the start and end times.
-                // This allows us to ensure that there is around 20 ticks per second.
                 long startTime = System.currentTimeMillis();
                 tick++;
-
-                // Tick the world
                 world.tick(this::tick);
-
-                // Update nodes
                 for (PlayerImpl player : playerList.getAllPlayers()) {
                     tick(player.getTracker()::updateNodes);
                 }
-
-                // Wait for the tick workers to finish
+                for(PlayerImpl player : instance.getPlayerList().getAllPlayers())
+                    player.getConnection().sendPacket(new PacketOutUpdateLeaderboardFFA(instance));
                 tickWorkers.forEach(TickWorker::waitForCompletion);
-                
-                // Tick the plugin scheduler
                 scheduler.serverTick(tick);
-
                 long tickDuration = System.currentTimeMillis() - startTime;
                 if (tickDuration < 50) {
-                    // We can sleep for at least 1ms
                     log.finer("Tick took " + tickDuration + "ms, sleeping for a bit");
                     Thread.sleep(50 - tickDuration);
                 } else {
-                    // No sleep allowed, move on to the next tick
                     log.finer("Tick took " + tickDuration + "ms (which is >=50ms), no time for sleep");
                 }
             } catch (InterruptedException ex) {
                 break;
             }
         }
-
-        // Shut down tick workers
-        // We initiate all shutdowns before waiting on them to reduce shutdown time
-        log.info("Shutting down tick workers...");
         tickWorkers.forEach(TickWorker::shutdownGracefully);
         tickWorkers.forEach(TickWorker::waitForShutdown);
-
-        // Shut down network manager
-        log.info("Shutting down network manager...");
         networkManager.shutdown();
-
-        // Disable plugins
         log.info("Disabling plugins...");
         pluginManager.disablePlugins();
-
-        log.info("Goodbye!");
+        log.info("Successfully stopped server!");
+        try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        System.exit(-1);
     }
 
     public void handleCommand(String s) {
@@ -332,21 +280,7 @@ public class OgarServer implements Server {
         if (s.isEmpty()) {
             return;
         }
-
-        // TODO: More modular system for command handling
-        switch (s.toLowerCase()) {
-            case "help":
-                log.info("Command listing:");
-                log.info("\thelp\t\tShows this listing.");
-                log.info("\tstop\t\tShuts down the server.");
-                break;
-            case "stop":
-                shutdown();
-                break;
-            default:
-                log.info("Unknown command. Type \"help\" for help.");
-                break;
-        }
+        Commands.onCommand(s);
     }
 
     public void shutdown() {
@@ -361,16 +295,15 @@ public class OgarServer implements Server {
                     bestWorker = w;
                     continue;
                 }
-
                 if (w.getObjectsRemaining() < bestWorker.getObjectsRemaining()) {
                     bestWorker = w;
                 }
             }
-
             bestWorker.tick(t);
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unused" })
     private void tick(Supplier... suppliers) {
         for (Supplier s : suppliers) {
             tick(new TickableSupplier(s));
@@ -379,7 +312,7 @@ public class OgarServer implements Server {
 
     private static class LogFormatter extends Formatter {
 
-        private static final DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss.SSS");
+        private static final DateFormat df = new SimpleDateFormat("HH:mm:ss");
 
         @Override
         public String format(LogRecord record) {
@@ -389,10 +322,24 @@ public class OgarServer implements Server {
             sb.append("] ");
             sb.append(formatMessage(record));
             sb.append('\n');
-            if (record.getThrown() != null) {
-                sb.append(Throwables.getStackTraceAsString(record.getThrown()));
-            }
             return sb.toString();
         }
+    }
+
+    @Override
+    public String getIp() {
+        return configuration.server.ip;
+    }
+    
+    public int getPort() {
+    	return configuration.server.port;
+    }
+    
+    public String getServerName() {
+    	return configuration.server.name;
+    }
+    
+    public String getOgarVersion() {
+    	return ogarVersion;
     }
 }
