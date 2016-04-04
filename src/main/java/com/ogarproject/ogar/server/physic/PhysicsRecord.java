@@ -38,6 +38,10 @@ public class PhysicsRecord {
         movement = Calc.getMovementFromVector(vector);
     }
 
+    public void setMovement(MovementRecord record){
+        movement = record;
+    }
+
     public void UpdatePosition() {
         Vector vector = getVector();
         entity.setPosition(entity.getPosition().add(vector.getX(), vector.getY()));

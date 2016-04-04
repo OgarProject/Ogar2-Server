@@ -24,7 +24,6 @@ import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.api.world.World;
 import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.config.OgarConfig;
-import com.ogarproject.ogar.server.config.OgarConfig.World.Food;
 import com.ogarproject.ogar.server.entity.EntityImpl;
 import com.ogarproject.ogar.server.entity.impl.CellImpl;
 import com.ogarproject.ogar.server.entity.impl.FoodImpl;
@@ -33,7 +32,6 @@ import com.ogarproject.ogar.server.entity.impl.VirusImpl;
 import com.ogarproject.ogar.server.tick.Tickable;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import jline.internal.Log;
 
 import java.util.Collection;
 import java.util.List;
@@ -200,8 +198,7 @@ public class WorldImpl implements World {
             }
 
             for (EntityImpl entity : entities.valueCollection()) {
-                if(!entity.isInitialized()) entity.InitPhysics(entity);
-                entity.UpdateMovement();
+                entity.AutoUpdatePhysics(entity);
                 serverTick.accept(entity);
             }
         } catch (Exception ex){

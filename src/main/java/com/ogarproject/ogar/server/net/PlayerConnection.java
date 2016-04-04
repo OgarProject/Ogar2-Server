@@ -19,6 +19,7 @@ package com.ogarproject.ogar.server.net;
 import com.google.common.base.Preconditions;
 import com.ogarproject.ogar.api.Ogar;
 import com.ogarproject.ogar.api.entity.Cell;
+import com.ogarproject.ogar.api.entity.Entity;
 import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.api.event.player.PlayerConnectedEvent;
 import com.ogarproject.ogar.api.event.player.PlayerConnectingEvent;
@@ -158,7 +159,8 @@ public class PlayerConnection {
         for (Cell cell : player.getCells()) {
             if (!(cell.getMass() > OgarServer.getInstance().getConfig().player.minMassEject)) return;
             cell.setMass(cell.getMass() - OgarServer.getInstance().getConfig().player.minMassEject);
-            OgarServer.getInstance().getWorld().spawnEntity(EntityType.MASS, cell.getPosition(), null);
+            Entity mass = OgarServer.getInstance().getWorld().spawnEntity(EntityType.MASS, cell.getPosition(), null);
+            ((EntityImpl) mass).getPhysics().setVector(getGlobalMousePosition());
         }
     }
 

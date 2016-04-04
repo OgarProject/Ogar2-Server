@@ -8,6 +8,21 @@ import com.ogarproject.ogar.api.entity.Entity;
 public class PhysicsSupport {
     public PhysicsRecord record;
     boolean inited = false;
+    boolean enable = true;
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+    public void AutoUpdatePhysics(Entity entity) {
+        if(!isEnable()) return;
+        if (!isInitialized()) InitPhysics(entity);
+        UpdateMovement();
+    }
 
     public boolean isInitialized() {
         return inited;
@@ -18,12 +33,11 @@ public class PhysicsSupport {
         inited = true;
     }
 
-
-    public PhysicsRecord getPhysics(){
+    public PhysicsRecord getPhysics() {
         return record;
     }
 
-    public void UpdateMovement(){
+    public void UpdateMovement() {
         record.Update();
     }
 }
