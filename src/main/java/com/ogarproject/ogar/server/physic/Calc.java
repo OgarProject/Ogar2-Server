@@ -4,7 +4,7 @@ package com.ogarproject.ogar.server.physic;
  * Created by Porama2 on 2/4/2016.
  */
 public class Calc {
-    public static double getDegreeFromRadians(double radians) {
+    public static double getAngle(double radians) {
         return radians * (180.0 / Math.PI);
     }
 
@@ -12,19 +12,24 @@ public class Calc {
         return getVectorFromMovement(movement.getDegree(), movement.getSpeed());
     }
 
-    public static Vector getVectorFromMovement(double degree, double speed) {
+    public static Vector getVectorFromMovement(double angle, double speed) {
 
-        double VecX = Math.cos((degree / 360) * (Math.PI * 2)) * speed;
-        double VecY = Math.sin((degree / 360) * (Math.PI * 2)) * speed;
+        double VecX = Math.cos((angle / 360) * (Math.PI * 2)) * speed;
+        double VecY = Math.sin((angle / 360) * (Math.PI * 2)) * speed;
         return new Vector(VecX, VecY);
     }
 
     public static MovementRecord getMovementFromVector(Vector vector) {
         double diff = vector.distanceCenter();
-        double X = vector.getX() / diff;
+        //double X = vector.getX() / diff;
         //int Y = (int) (vector.getY() / diff);
-        double degree = getDegreeFromRadians(Math.acos(X));
+        //double angle = getAngleFromRadians(Math.acos(X));
+        double angle = getAngle(vector.getX(),vector.getY());
         double speed = diff;
-        return new MovementRecord(degree, speed);
+        return new MovementRecord(angle, speed);
+    }
+
+    public static double getAngle(double X, double Y) {
+        return Math.atan2(X, Y);
     }
 }
