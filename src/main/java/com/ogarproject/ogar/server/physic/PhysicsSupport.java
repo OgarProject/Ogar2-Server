@@ -21,7 +21,8 @@ public class PhysicsSupport {
     public void AutoUpdatePhysics(Entity entity) {
         if(!isEnable()) return;
         if (!isInitialized()) InitPhysics(entity);
-        UpdateMovement();
+        if(!record.isUpdateNeeded()) return;
+        record.Update();
     }
 
     public boolean isInitialized() {
@@ -35,9 +36,5 @@ public class PhysicsSupport {
 
     public PhysicsData getPhysics() {
         return record;
-    }
-
-    public void UpdateMovement() {
-        record.Update();
     }
 }

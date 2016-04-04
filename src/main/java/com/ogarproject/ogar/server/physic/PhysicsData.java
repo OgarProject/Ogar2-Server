@@ -38,29 +38,29 @@ public class PhysicsData {
         movement = Calc.getMovementFromVector(vector);
     }
 
-    public void setMovement(MovementData record){
+    public void setMovement(MovementData record) {
         movement = record;
     }
 
-    public void setSpeed(double speed){
-        movement.setSpeed(speed);
-    }
-
-    public double getSpeed(){
+    public double getSpeed() {
         return movement.getSpeed();
     }
 
-    public void setAngle(double angle){
-        movement.setAngle(angle);
+    public void setSpeed(double speed) {
+        movement.setSpeed(speed);
     }
 
-    public double getAngle(){
+    public double getAngle() {
         return movement.getAngle();
+    }
+
+    public void setAngle(double angle) {
+        movement.setAngle(angle);
     }
 
     public void UpdatePosition() {
         Vector vector = getVector();
-        entity.setPosition(entity.getPosition().add(vector.getX(), vector.getY()));
+        entity.setPosition(Calc.KeepInWorld(entity.getPosition().add(vector.getX(), vector.getY())));
     }
 
     public void UpdateData() {
