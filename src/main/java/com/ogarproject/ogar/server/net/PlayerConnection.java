@@ -33,6 +33,7 @@ import com.ogarproject.ogar.server.net.packet.outbound.PacketOutWorldBorder;
 import com.ogarproject.ogar.server.net.packet.universal.PacketChat;
 import com.ogarproject.ogar.server.net.packet.universal.PacketOMPMessage;
 import com.ogarproject.ogar.server.net.throwable.UnhandledPacketException;
+import com.ogarproject.ogar.server.physic.Vector;
 import com.ogarproject.ogar.server.world.PlayerImpl;
 import io.netty.channel.Channel;
 
@@ -160,7 +161,7 @@ public class PlayerConnection {
             if (!(cell.getMass() > OgarServer.getInstance().getConfig().player.minMassEject)) return;
             cell.setMass(cell.getMass() - OgarServer.getInstance().getConfig().player.minMassEject);
             Entity mass = OgarServer.getInstance().getWorld().spawnEntity(EntityType.MASS, cell.getPosition(), null);
-            ((EntityImpl) mass).getPhysics().setVector(getGlobalMousePosition());
+            ((EntityImpl) mass).getPhysics().setVector(new Vector(getGlobalMousePosition().getX(),getGlobalMousePosition().getY()));
         }
     }
 
