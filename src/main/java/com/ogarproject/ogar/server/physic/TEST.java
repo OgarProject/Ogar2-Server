@@ -5,7 +5,7 @@ package com.ogarproject.ogar.server.physic;
  */
 public class TEST {
     public static void main(String args[]){
-        MovementRecord rec = new MovementRecord(90,1);
+        MovementData rec = new MovementData(90,1);
         System.out.println(rec.toString());
         Vector vec = Calc.getVectorFromMovement(rec);
         System.out.println(vec.toString());

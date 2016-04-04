@@ -5,8 +5,8 @@ package com.ogarproject.ogar.server.physic;
  */
 public class Calc {
 
-    public static Vector getVectorFromMovement(MovementRecord movement) {
-        return getVectorFromMovement(movement.getDegree(), movement.getSpeed());
+    public static Vector getVectorFromMovement(MovementData movement) {
+        return getVectorFromMovement(movement.getAngle(), movement.getSpeed());
     }
 
     public static Vector getVectorFromMovement(double angle, double speed) {
@@ -16,15 +16,19 @@ public class Calc {
         return new Vector(VecX, VecY);
     }
 
-    public static MovementRecord getMovementFromVector(Vector vector) {
+    public static MovementData getMovementFromVector(Vector vector) {
         double diff = vector.distanceCenter();
         double angle = getAngle(vector.getX(), vector.getY());
         double speed = diff;
-        return new MovementRecord(angle, speed);
+        return new MovementData(angle, speed);
     }
 
     public static double getAngle(double X, double Y) {
         return Math.atan2(X, Y);
+    }
+
+    public static double getAngle(Vector vector) {
+        return getAngle(vector.getX(), vector.getY());
     }
 
 }

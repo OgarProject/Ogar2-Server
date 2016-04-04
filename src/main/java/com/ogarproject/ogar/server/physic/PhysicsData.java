@@ -5,12 +5,12 @@ import com.ogarproject.ogar.api.entity.Entity;
 /**
  * Created by Porama2 on 1/4/2016.
  */
-public class PhysicsRecord {
+public class PhysicsData {
     final Entity entity;
-    public MovementRecord movement = new MovementRecord();
+    public MovementData movement = new MovementData();
     double resistance = 0;
 
-    public PhysicsRecord(Entity entityowner) {
+    public PhysicsData(Entity entityowner) {
         entity = entityowner;
     }
 
@@ -31,15 +31,31 @@ public class PhysicsRecord {
     }
 
     public Vector getVector() {
-        return Calc.getVectorFromMovement(movement.getDegree(), movement.getSpeed());
+        return Calc.getVectorFromMovement(movement.getAngle(), movement.getSpeed());
     }
 
     public void setVector(Vector vector) {
         movement = Calc.getMovementFromVector(vector);
     }
 
-    public void setMovement(MovementRecord record){
+    public void setMovement(MovementData record){
         movement = record;
+    }
+
+    public void setSpeed(double speed){
+        movement.setSpeed(speed);
+    }
+
+    public double getSpeed(){
+        return movement.getSpeed();
+    }
+
+    public void setAngle(double angle){
+        movement.setAngle(angle);
+    }
+
+    public double getAngle(){
+        return movement.getAngle();
     }
 
     public void UpdatePosition() {
@@ -55,7 +71,6 @@ public class PhysicsRecord {
     }
 
     public void Update() {
-        //if(!isNeedUpdate()) return;
         UpdatePosition();
         UpdateData();
     }

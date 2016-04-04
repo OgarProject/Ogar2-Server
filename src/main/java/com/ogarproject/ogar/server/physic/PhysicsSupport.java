@@ -6,7 +6,7 @@ import com.ogarproject.ogar.api.entity.Entity;
  * Created by Porama2 on 2/4/2016.
  */
 public class PhysicsSupport {
-    public PhysicsRecord record;
+    public PhysicsData record;
     boolean inited = false;
     boolean enable = true;
 
@@ -29,11 +29,11 @@ public class PhysicsSupport {
     }
 
     public void InitPhysics(Entity entity) {
-        record = new PhysicsRecord(entity);
+        record = new PhysicsData(entity);
         inited = true;
     }
 
-    public PhysicsRecord getPhysics() {
+    public PhysicsData getPhysics() {
         return record;
     }
 
