@@ -197,7 +197,8 @@ public class WorldImpl implements World {
                 spawnFood();
             }
 
-            for (EntityImpl entity : entities.valueCollection()) {
+            for (Object entityobj :  entities.valueCollection().toArray()) {
+                EntityImpl entity = (EntityImpl) entityobj;
                 entity.AutoUpdatePhysics(entity);
                 serverTick.accept(entity);
             }
