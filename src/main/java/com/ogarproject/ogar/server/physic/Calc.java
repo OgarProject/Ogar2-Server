@@ -23,7 +23,7 @@ public class Calc {
     public static MovementData getMovementFromVector(Vector vector) {
         double diff = vector.distanceCenter();
         //double angle = getAngle(vector.getX(), vector.getY());
-        double angle = getAngle(vector.getX(), vector.getY(), diff);
+        double angle = getAngle(vector.getX(), Double.NaN , diff);
         double speed = diff;
         return new MovementData(angle, speed);
     }
@@ -33,8 +33,8 @@ public class Calc {
     }*/
 
     public static double getAngle(double radians) {
-        return (radians * 360.0) / (Math.PI * 2.0);
-        //return Math.toDegrees(radians);
+        //return (radians * 360.0) / (Math.PI * 2.0);
+        return Math.toDegrees(radians);
     }
 
     public static double getAngle(double X, double Y, double distance) {
