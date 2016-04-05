@@ -109,7 +109,7 @@ public class PlayerTracker {
         return ImmutableList.copyOf(visibleEntities);
     }
 
-    public void RemoveGhostEntty() {
+    public void RemoveGhostEntity() {
         //VALIDATE LIST
         for (Object eido : visibleEntities.toArray()) {
             int eid = (int) eido;
@@ -120,7 +120,7 @@ public class PlayerTracker {
 
     public void updateNodes() {
         // Remove Entity that not remove properly
-        RemoveGhostEntty();
+        RemoveGhostEntity();
         // Process the removal queue
         Set<Integer> updates = new HashSet<>();
         Set<EntityImpl> removals = new HashSet<>();
