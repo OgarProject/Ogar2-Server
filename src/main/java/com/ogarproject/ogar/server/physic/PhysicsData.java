@@ -60,7 +60,7 @@ public class PhysicsData {
 
     public void UpdatePosition() {
         Vector vector = getVector();
-        entity.setPosition(Calc.KeepInWorld(entity.getPosition().add(vector.getX(), vector.getY())));
+        entity.setPosition(Calc.KeepInWorld(entity.getPosition().add(vector.getX(), 0 - vector.getY())));
     }
 
     public void UpdateData() {

@@ -170,7 +170,7 @@ public class PlayerConnection {
                     getGlobalMousePosition().getX() - cell.getPosition().getX(),
                     (((WorldImpl)Ogar.getWorld()).getBorder().getTop() - getGlobalMousePosition().getY()) - cell.getPosition().getY());
             EntityImpl entity = (EntityImpl) mass;
-            entity.getPhysics().setAngle(90);
+            entity.getPhysics().setAngle(135);
             entity.getPhysics().setSpeed(250);
             entity.getPhysics().setResistance(30);
 
