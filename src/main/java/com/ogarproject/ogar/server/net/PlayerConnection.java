@@ -24,6 +24,7 @@ import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.api.event.player.PlayerConnectedEvent;
 import com.ogarproject.ogar.api.event.player.PlayerConnectingEvent;
 import com.ogarproject.ogar.api.event.player.PlayerNameChangeEvent;
+import com.ogarproject.ogar.api.world.Position;
 import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.entity.EntityImpl;
 import com.ogarproject.ogar.server.entity.impl.CellImpl;
@@ -33,10 +34,8 @@ import com.ogarproject.ogar.server.net.packet.outbound.PacketOutWorldBorder;
 import com.ogarproject.ogar.server.net.packet.universal.PacketChat;
 import com.ogarproject.ogar.server.net.packet.universal.PacketOMPMessage;
 import com.ogarproject.ogar.server.net.throwable.UnhandledPacketException;
-import com.ogarproject.ogar.server.physic.Calc;
 import com.ogarproject.ogar.server.physic.Vector;
 import com.ogarproject.ogar.server.world.PlayerImpl;
-import com.ogarproject.ogar.server.world.WorldImpl;
 import io.netty.channel.Channel;
 
 import java.net.SocketAddress;
@@ -160,16 +159,26 @@ public class PlayerConnection {
     public void handle(PacketInEjectMass packet) {
         checkConnected();
         for (Cell cell : player.getCells()) {
-            if (!(cell.getMass() > OgarServer.getInstance().getConfig().player.minMassEject)) return;
-            cell.setMass(cell.getMass() - OgarServer.getInstance().getConfig().player.minMassEject);
-            Entity mass = OgarServer.getInstance().getWorld().spawnEntity(EntityType.MASS, cell.getPosition(), null);
-            Vector vector = new Vector(
-                    getGlobalMousePosition().getX() - cell.getPosition().getX(),
-                    (((WorldImpl)Ogar.getWorld()).getBorder().getTop() - getGlobalMousePosition().getY()) - cell.getPosition().getY());
-            EntityImpl entity = (EntityImpl) mass;
-            entity.getPhysics().setAngle(135);
-            entity.getPhysics().setSpeed(250);
-            entity.getPhysics().setResistance(30);
+            try {
+                if (!(cell.getMass() > OgarServer.getInstance().getConfig().player.minMassEject)) return;
+                cell.setMass(cell.getMass() - OgarServer.getInstance().getConfig().player.minMassEject);
+                Entity mass = OgarServer.getInstance().getWorld().spawnEntity(EntityType.MASS, cell.getPosition(), null);
+
+                Position mouse;
+                if (player.getConnection().isIndividualMovementEnabled())
+                    mouse = new Position(getCellMousePosition(cell.getID()).getX(), getCellMousePosition(cell.getID()).getY());
+                else
+                    mouse = new Position(getGlobalMousePosition().getX(), getGlobalMousePosition().getY());
+                mouse.add(0 - cell.getPosition().getX(), 0 - cell.getPosition().getY());
+                Vector cellvec = new Vector(mouse);
+                cellvec.ReverseY();
+                EntityImpl entity = (EntityImpl) mass;
+                entity.getPhysics().setVector(cellvec);
+                entity.getPhysics().setSpeed(250);
+                entity.getPhysics().setResistance(30);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }

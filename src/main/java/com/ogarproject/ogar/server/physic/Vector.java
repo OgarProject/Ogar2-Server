@@ -17,6 +17,11 @@ public class Vector {
         this.Y = Y;
     }
 
+    public Vector(Position pos){
+        X = pos.getX();
+        Y = pos.getY();
+    }
+
     public double getX() {
         return X;
     }
@@ -39,6 +44,10 @@ public class Vector {
 
     public double distanceCenter(){
         return distance(new Vector());
+    }
+
+    public void ReverseY(){
+        Y = 0 - Y;
     }
 
     public double distance(Vector second) {
