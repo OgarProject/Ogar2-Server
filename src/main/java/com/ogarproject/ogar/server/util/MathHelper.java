@@ -16,6 +16,9 @@
  */
 package com.ogarproject.ogar.server.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class MathHelper {
 
     /**
@@ -27,5 +30,11 @@ public class MathHelper {
      */
     public static double fastAbs(double input) {
         return input < 0 ? -input : input;
+    }
+
+    public static double round(double value, int places) {
+        BigDecimal bigDecimal = new BigDecimal(value);
+        bigDecimal.setScale(places, RoundingMode.HALF_UP);
+        return bigDecimal.doubleValue();
     }
 }

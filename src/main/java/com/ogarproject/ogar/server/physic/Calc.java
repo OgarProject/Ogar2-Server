@@ -22,25 +22,36 @@ public class Calc {
 
     public static MovementData getMovementFromVector(Vector vector) {
         double diff = vector.distanceCenter();
-        double angle = getAngle(vector.getX(), vector.getY());
+        //double angle = getAngle(vector.getX(), vector.getY());
+        double angle = getAngle(vector.getX(), vector.getY(), diff);
         double speed = diff;
         return new MovementData(angle, speed);
     }
 
-    public static double getAngle(double X, double Y) {
-        return getAngle(Math.atan2(X, Y));
-    }
+    /*public static double getAngle(double X, double Y) {
+        return Math.toDegrees(Math.atan2(X, Y));
+    }*/
 
     public static double getAngle(double radians) {
-        return radians * (180.0 / Math.PI);
+        return (radians * 360.0) / (Math.PI * 2.0);
+        //return Math.toDegrees(radians);
+    }
+
+    public static double getAngle(double X, double Y, double distance) {
+        //if (!Double.isNaN(X)) {
+        return getAngle(Math.acos(X / distance));
+        //} else {
+        //    return getAngle(Math.asin(Y / distance));
+        // }
     }
 
     public static double getRadians(double angle) {
-        return (angle / 360) * (Math.PI * 2);
+        //return (angle / 360.0) * (Math.PI * 2.0);
+        return Math.toRadians(angle);
     }
 
     public static double getAngle(Vector vector) {
-        return getAngle(vector.getX(), vector.getY());
+        return getAngle(vector.getX(), vector.getY(), vector.distanceCenter());
     }
 
     public static Position KeepInWorld(Position position) {
@@ -63,7 +74,6 @@ public class Calc {
         position.setY(y);
         return position;
     }
-
 
 
 }
