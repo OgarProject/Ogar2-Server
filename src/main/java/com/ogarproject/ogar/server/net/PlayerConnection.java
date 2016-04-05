@@ -163,9 +163,6 @@ public class PlayerConnection {
             if (!(cell.getMass() > OgarServer.getInstance().getConfig().player.minMassEject)) return;
             cell.setMass(cell.getMass() - OgarServer.getInstance().getConfig().player.minMassEject);
             Entity mass = OgarServer.getInstance().getWorld().spawnEntity(EntityType.MASS, cell.getPosition(), null);
-            System.out.println(getGlobalMousePosition().getX() + " " + getGlobalMousePosition().getY());
-            System.out.println(cell.getPosition().
-                    getX() + " " + cell.getPosition().getY());
             Vector vector = new Vector(
                     getGlobalMousePosition().getX() - cell.getPosition().getX(),
                     (((WorldImpl)Ogar.getWorld()).getBorder().getTop() - getGlobalMousePosition().getY()) - cell.getPosition().getY());
