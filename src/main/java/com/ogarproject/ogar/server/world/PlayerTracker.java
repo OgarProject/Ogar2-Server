@@ -109,13 +109,18 @@ public class PlayerTracker {
         return ImmutableList.copyOf(visibleEntities);
     }
 
-    public void updateNodes() {
+    public void RemoveGhostEntty() {
         //VALIDATE LIST
         for (Object eido : visibleEntities.toArray()) {
             int eid = (int) eido;
             if (Ogar.getWorld().getEntity(eid) != null) continue;
             visibleEntities.remove(eid);
         }
+    }
+
+    public void updateNodes() {
+        // Remove Entity that not remove properly
+        RemoveGhostEntty();
         // Process the removal queue
         Set<Integer> updates = new HashSet<>();
         Set<EntityImpl> removals = new HashSet<>();
