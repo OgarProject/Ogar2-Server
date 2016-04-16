@@ -24,5 +24,5 @@ public interface Tickable {
     /**
      * Ticks this Tickable.
      */
-    public void tick();
+    void tick();
 }

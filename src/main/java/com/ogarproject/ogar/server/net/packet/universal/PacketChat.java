@@ -36,8 +36,8 @@ public class PacketChat extends Packet
 	// TODO notused
 	public int flags;
 
-	public PacketChat(){};
-	
+	public PacketChat(){}
+
 	public PacketChat(PlayerImpl sender, String message)
 	{
 		this.message = message;

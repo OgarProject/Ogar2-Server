@@ -168,10 +168,7 @@ public class PlayerImpl implements Player {
             return false;
         }
         final PlayerImpl other = (PlayerImpl) obj;
-        if (!Objects.equals(this.playerConnection, other.playerConnection)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.playerConnection, other.playerConnection);
     }
 
     @Override
