@@ -17,6 +17,8 @@
 package com.ogarproject.ogar.server.gui;
 
 import com.ogarproject.ogar.server.OgarServer;
+
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
@@ -41,7 +43,7 @@ public class ServerGUI {
     public static void spawn(OgarServer server) {
         JFrame frame = new JFrame();
         frame.setLayout(new GridBagLayout());
-        frame.setTitle("Ogar Server 2");
+        frame.setTitle("Ogar 2 by OgarioProject");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JTextArea console = new JTextArea(40, 120);

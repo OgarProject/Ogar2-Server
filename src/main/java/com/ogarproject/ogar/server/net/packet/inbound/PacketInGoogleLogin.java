@@ -14,15 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with Ogar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ogarproject.ogar.server.tick;
+package com.ogarproject.ogar.server.net.packet.inbound;
 
-/**
- * A Tickable is an object that is able to be ticked.
- */
-public interface Tickable {
+import com.ogarproject.ogar.server.net.packet.Packet;
+import com.ogarproject.ogar.server.net.throwable.WrongDirectionException;
 
-    /**
-     * Ticks this Tickable.
-     */
-    void tick();
+import io.netty.buffer.ByteBuf;
+
+public class PacketInGoogleLogin extends Packet {
+    public String identifier;
+
+	@Override
+	public void writeData(ByteBuf buf) {
+        throw new WrongDirectionException();
+		
+	}
+
+	@Override
+	public void readData(ByteBuf buf) {
+        identifier = readUTF8(buf);
+		
+	}
+
 }

@@ -5,18 +5,18 @@
     <artifactId>ogar-server</artifactId>
     <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    
+
     <name>Ogar Server</name>
     <description>An open source Agar.io server implementation, written in Java.</description>
     <inceptionYear>2015</inceptionYear>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <netty.version>4.0.29.Final</netty.version>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>net.sf.trove4j</groupId>
@@ -36,35 +36,35 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-buffer</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-common</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-transport</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.0.CR4</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.ogarproject</groupId>
             <artifactId>ogar-api</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -73,11 +73,33 @@
             <artifactId>jline</artifactId>
             <version>2.13</version>
         </dependency>
+        <dependency>
+	<groupId>log4j</groupId>
+	<artifactId>log4j</artifactId>
+	<version>1.2.17</version>
+</dependency>
     </dependencies>
-    
+
+    <repositories>
+        <repository>
+            <id>thundergemios10-repo</id>
+            <name>OgarioProject repo</name>
+            <url>http://repo.thundergemios10.com/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.5.1</version>
+              <configuration>
+              <source>1.8</source>
+              <target>1.8</target>
+          </configuration>
+</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

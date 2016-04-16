@@ -14,15 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Ogar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ogarproject.ogar.server.tick;
+package com.ogarproject.ogar.server.net.packet.outbound;
 
-/**
- * A Tickable is an object that is able to be ticked.
- */
-public interface Tickable {
+import com.ogarproject.ogar.server.net.packet.Packet;
+import com.ogarproject.ogar.server.net.throwable.WrongDirectionException;
 
-    /**
-     * Ticks this Tickable.
-     */
-    void tick();
+import io.netty.buffer.ByteBuf;
+
+public class PacketOutUpdatePositionAndSize extends Packet {
+
+	@Override
+	public void writeData(ByteBuf buf) {
+	}
+
+	@Override
+	public void readData(ByteBuf buf) {
+        throw new WrongDirectionException();
+		
+	}
+
 }

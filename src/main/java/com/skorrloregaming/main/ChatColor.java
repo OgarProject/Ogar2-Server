@@ -14,15 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Ogar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ogarproject.ogar.server.tick;
+package com.skorrloregaming.main;
 
-/**
- * A Tickable is an object that is able to be ticked.
- */
-public interface Tickable {
-
-    /**
-     * Ticks this Tickable.
-     */
-    void tick();
+public class ChatColor {
+	public static final String RESET = "\u001B[0m";
+	public static final String BLACK = "\u001B[30m";
+	public static final String RED = "\u001B[31m";
+	public static final String GREEN = "\u001B[32m";
+	public static final String YELLOW = "\u001B[33m";
+	public static final String BLUE = "\u001B[34m";
+	public static final String PURPLE = "\u001B[35m";
+	public static final String CYAN = "\u001B[36m";
+	public static final String WHITE = "\u001B[37m";
 }

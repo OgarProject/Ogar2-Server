@@ -18,6 +18,7 @@ package com.ogarproject.ogar.server.entity;
 
 import com.ogarproject.ogar.api.entity.Entity;
 import com.ogarproject.ogar.api.entity.EntityType;
+import com.ogarproject.ogar.server.physic.PhysicsSupport;
 import com.ogarproject.ogar.server.tick.Tickable;
 import com.ogarproject.ogar.api.world.Position;
 import com.ogarproject.ogar.server.world.WorldImpl;
@@ -25,7 +26,7 @@ import java.awt.Color;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class EntityImpl implements Entity, Tickable {
+public abstract class EntityImpl extends PhysicsSupport implements Entity, Tickable {
 
     private static final AtomicInteger nextEntityId = new AtomicInteger(1);
     protected final int id;
@@ -42,6 +43,7 @@ public abstract class EntityImpl implements Entity, Tickable {
         this.type = type;
         this.world = world;
         this.position = position;
+        InitPhysics(this);
     }
 
     @Override
@@ -127,11 +129,8 @@ public abstract class EntityImpl implements Entity, Tickable {
     }
 
     public boolean collisionCheck(double bottomY, double topY, double rightX, double leftX) {
-        if (getY() > bottomY || getY() < topY || getX() > rightX || getX() < leftX) {
-            return false;
-        }
+        return !(getY() > bottomY || getY() < topY || getX() > rightX || getX() < leftX);
 
-        return true;
     }
 
     /**
@@ -167,10 +166,7 @@ public abstract class EntityImpl implements Entity, Tickable {
         if (this.id != other.id) {
             return false;
         }
-        if (this.type != other.type) {
-            return false;
-        }
-        return true;
+        return this.type == other.type;
     }
 
 }

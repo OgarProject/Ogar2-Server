@@ -24,7 +24,6 @@ import com.ogarproject.ogar.api.entity.EntityType;
 import com.ogarproject.ogar.api.world.World;
 import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.config.OgarConfig;
-import com.ogarproject.ogar.server.config.OgarConfig.World.Food;
 import com.ogarproject.ogar.server.entity.EntityImpl;
 import com.ogarproject.ogar.server.entity.impl.CellImpl;
 import com.ogarproject.ogar.server.entity.impl.FoodImpl;
@@ -33,10 +32,12 @@ import com.ogarproject.ogar.server.entity.impl.VirusImpl;
 import com.ogarproject.ogar.server.tick.Tickable;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 public class WorldImpl implements World {
 
@@ -56,6 +57,11 @@ public class WorldImpl implements World {
         for (int i = 0; i < server.getConfig().world.food.startAmount; i++) {
             spawnEntity(EntityType.FOOD);
         }
+        
+        for (int i = 0; i < server.getConfig().world.virus.startAmount; i++) {
+            spawnEntity(EntityType.VIRUS);
+        }
+        
     }
 
     @Override
@@ -76,7 +82,7 @@ public class WorldImpl implements World {
         return (CellImpl) spawnEntity(EntityType.CELL, position, player);
     }
 
-    private EntityImpl spawnEntity(EntityType type, Position position, CellOwner owner) {
+    public EntityImpl spawnEntity(EntityType type, Position position, CellOwner owner) {
         if (type == null || position == null) {
             return null;
         }
@@ -186,12 +192,19 @@ public class WorldImpl implements World {
     }
 
     public void tick(Consumer<Tickable> serverTick) {
-        if (server.getTick() % server.getConfig().world.food.spawnInterval == 0) {
-            spawnFood();
-        }
+        try{
+            if (server.getTick() % server.getConfig().world.food.spawnInterval == 0) {
+                spawnFood();
+            }
 
-        for (EntityImpl entity : entities.valueCollection()) {
-            serverTick.accept(entity);
+            for (Object entityobj :  entities.valueCollection().toArray()) {
+                EntityImpl entity = (EntityImpl) entityobj;
+                entity.AutoUpdatePhysics(entity);
+                serverTick.accept(entity);
+            }
+        } catch (Exception ex){
+            Logger.getGlobal().warning("An internal error has occured while rendering, continuing to suppress...");
+            ex.printStackTrace();
         }
     }
 

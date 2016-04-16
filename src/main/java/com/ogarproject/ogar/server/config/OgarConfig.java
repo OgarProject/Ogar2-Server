@@ -16,7 +16,7 @@
  */
 package com.ogarproject.ogar.server.config;
 
-public class OgarConfig extends JsonConfiguration {
+public class OgarConfig {
 
     public Server server = new Server();
     public World world = new World();
@@ -26,6 +26,9 @@ public class OgarConfig extends JsonConfiguration {
 
         public int port = 443;
         public int maxConnections = 100;
+        public String ip = "localhost";
+        public String name = "Unknown Server";
+        
     }
 
     public static class World {
@@ -33,6 +36,8 @@ public class OgarConfig extends JsonConfiguration {
         public View view = new View();
         public Border border = new Border();
         public Food food = new Food();
+        public Virus virus = new Virus();
+        public Mass mass = new Mass();
 
         public static class View {
 
@@ -54,12 +59,26 @@ public class OgarConfig extends JsonConfiguration {
             public int spawnPerInterval = 10; // How many food to spawn per interval
             public int startAmount = 100; // The amount of food to start the world with
             public int maxAmount = 500; // The maximum amount of food in the world at once
+            public int foodSize = 1; // The size of food spawned on the map
+            
         }
+        
+        public static class Mass {
+
+            public int ejectedMassSize = 28; // The amount the real mass will be after ejection
+            
+        }
+        
+        public static class Virus {
+            public int virusSize = 150; // The size of a virus spawned on the map
+            public int startAmount = 50; // The amount of viruses to start the world with
+        }
+        
     }
 
     public static class Player {
 
-        public int startMass = 10;
+        public int startMass = 35;
         public int maxMass = 22500;
         public int minMassEject = 32;
         public int minMassSplit = 36;

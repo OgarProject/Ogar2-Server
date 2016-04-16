@@ -17,23 +17,27 @@
 package com.ogarproject.ogar.server.entity.impl;
 
 import com.ogarproject.ogar.api.entity.EntityType;
+import com.ogarproject.ogar.api.entity.Virus;
+import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.entity.EntityImpl;
 import com.ogarproject.ogar.api.world.Position;
 import com.ogarproject.ogar.server.world.WorldImpl;
 
-public class VirusImpl extends EntityImpl {
+public class VirusImpl extends EntityImpl implements Virus {
 
     public VirusImpl(WorldImpl world, Position position) {
         super(EntityType.VIRUS, world, position);
+        this.spiked = true;
+        this.mass = OgarServer.getInstance().getConfig().world.virus.virusSize;
     }
 
     @Override
     public boolean shouldUpdate() {
-        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools | Templates.
+        return true;
     }
 
     @Override
     public void tick() {
-        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools | Templates.
+        //TODO: Add code to split player into pieces when hit
     }
 }

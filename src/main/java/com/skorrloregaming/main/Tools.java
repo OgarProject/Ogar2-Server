@@ -14,15 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Ogar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ogarproject.ogar.server.tick;
+package com.skorrloregaming.main;
 
-/**
- * A Tickable is an object that is able to be ticked.
- */
-public interface Tickable {
+import java.util.logging.Logger;
 
-    /**
-     * Ticks this Tickable.
-     */
-    void tick();
+import com.ogarproject.ogar.server.OgarServer;
+import com.ogarproject.ogar.server.world.PlayerImpl;
+
+public class Tools {
+	public static PlayerImpl ConvertClientToPlayer(String clientID){
+		for (PlayerImpl player : OgarServer.getInstance().getPlayerList().getAllPlayers()){
+			if (player.getConnection().getRemoteAddress().toString().split(":")[1].equalsIgnoreCase(clientID)){
+				return player;
+			}
+		}
+		Logger.getGlobal().info("A severe internal error has occured trying to fetch client player!");
+		return null;
+	}
 }

@@ -1,33 +1,31 @@
 /**
  * This file is part of Ogar.
- *
+ * <p>
  * Ogar is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * Ogar is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with Ogar.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.ogarproject.ogar.server.world;
 
 import com.google.common.collect.ImmutableList;
+import com.ogarproject.ogar.api.Ogar;
+import com.ogarproject.ogar.api.entity.Cell;
 import com.ogarproject.ogar.server.OgarServer;
 import com.ogarproject.ogar.server.entity.EntityImpl;
 import com.ogarproject.ogar.server.net.PlayerConnection;
 import com.ogarproject.ogar.server.net.packet.outbound.PacketOutUpdateNodes;
-import java.util.ArrayDeque;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
-import com.ogarproject.ogar.api.entity.Cell;
 
 public class PlayerTracker {
 
@@ -111,7 +109,18 @@ public class PlayerTracker {
         return ImmutableList.copyOf(visibleEntities);
     }
 
+    public void RemoveGhostEntity() {
+        //VALIDATE LIST
+        for (Object eido : visibleEntities.toArray()) {
+            int eid = (int) eido;
+            if (Ogar.getWorld().getEntity(eid) != null) continue;
+            visibleEntities.remove(eid);
+        }
+    }
+
     public void updateNodes() {
+        // Remove Entity that not remove properly
+        RemoveGhostEntity();
         // Process the removal queue
         Set<Integer> updates = new HashSet<>();
         Set<EntityImpl> removals = new HashSet<>();
@@ -129,7 +138,7 @@ public class PlayerTracker {
 
             synchronized (visibleEntities) {
                 // Destroy now-invisible entities
-                for (Iterator<Integer> it = visibleEntities.iterator(); it.hasNext();) {
+                for (Iterator<Integer> it = visibleEntities.iterator(); it.hasNext(); ) {
                     int id = it.next();
                     if (!newVisible.contains(id)) {
                         // Remove from player's screen
@@ -149,7 +158,7 @@ public class PlayerTracker {
         }
 
         // Update entities that need to be updated
-        for (Iterator<Integer> it = visibleEntities.iterator(); it.hasNext();) {
+        for (Iterator<Integer> it = visibleEntities.iterator(); it.hasNext(); ) {
             int id = it.next();
             EntityImpl entity = world.getEntity(id);
             if (entity == null) {
